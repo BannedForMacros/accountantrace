@@ -1,3 +1,13 @@
+import {
+  Lightbulb,
+  Target,
+  GraduationCap,
+  Flame,
+  BookOpen,
+  Lock,
+  User as UserIcon,
+} from "lucide-react";
+import { requireUser } from "@/lib/auth";
 import { getEtapa, getCursosByEtapa, countPreguntasByEtapa } from "@/lib/queries";
 import { TopBar } from "@/components/hud/TopBar";
 import { EtapaHero } from "@/components/hud/EtapaHero";
@@ -5,45 +15,43 @@ import { StatCard } from "@/components/hud/StatCard";
 import { RankingPanel } from "@/components/hud/RankingPanel";
 import { BottomNav } from "@/components/hud/BottomNav";
 
-// Demo: sin autenticacion todavia. Mostramos etapa 0 con datos de prueba.
-const DEMO_USUARIO = {
-  nombre: "Estudiante AccountantRace",
-  genero: "HOMBRE" as "HOMBRE" | "MUJER",
-  etapaActual: 0,
-  xpTotal: 0,
-  monedas: 0,
-  gemas: 0,
-  rachaActual: 0,
-  precision: 0,
-  retosCompletados: 0,
-};
+const ELEMENTOS_BLOQUEADOS = [
+  "Biblioteca NIIF",
+  "Asistentes",
+  "Clientes",
+  "Sala de reuniones",
+  "Logo empresarial",
+];
 
 export default async function HomePage() {
-  const etapa = await getEtapa(DEMO_USUARIO.etapaActual);
+  const usuario = await requireUser();
+  const etapa = await getEtapa(usuario.etapaActual);
   if (!etapa) {
     return (
       <div className="p-8 text-[var(--ar-navy-900)]">
-        No se encontro la etapa {DEMO_USUARIO.etapaActual}. Corre el seed.
+        No se encontro la etapa {usuario.etapaActual}.
       </div>
     );
   }
 
-  const siguienteEtapa = await getEtapa(DEMO_USUARIO.etapaActual + 1);
+  const siguienteEtapa = await getEtapa(usuario.etapaActual + 1);
   const xpMeta = siguienteEtapa?.xpRequerido ?? etapa.xpRequerido + 100;
-  const cursos = await getCursosByEtapa(DEMO_USUARIO.etapaActual);
-  const preguntasDisp = await countPreguntasByEtapa(DEMO_USUARIO.etapaActual);
+  const cursos = await getCursosByEtapa(usuario.etapaActual);
+  const preguntasDisp = await countPreguntasByEtapa(usuario.etapaActual);
 
   const imagen =
-    DEMO_USUARIO.genero === "MUJER" ? etapa.imagenMujer : etapa.imagenHombre;
+    usuario.genero === "MUJER" ? etapa.imagenMujer : etapa.imagenHombre;
+
+  const nombreCompleto = `${usuario.nombre} ${usuario.apellidos}`.trim();
 
   return (
     <div className="flex min-h-screen flex-col">
       <TopBar
         nivel={etapa.id}
-        xpActual={DEMO_USUARIO.xpTotal}
+        xpActual={usuario.xpTotal}
         xpMeta={xpMeta}
-        monedas={DEMO_USUARIO.monedas}
-        gemas={DEMO_USUARIO.gemas}
+        monedas={usuario.monedas}
+        gemas={usuario.gemas}
       />
 
       <main className="mx-auto w-full max-w-7xl flex-1 px-6 py-6">
@@ -59,20 +67,25 @@ export default async function HomePage() {
               medalla={etapa.medalla}
             />
 
-            {/* Bienvenida + CTA */}
             <div className="ar-bg-navy-gradient rounded-2xl p-6 text-white shadow-lg">
               <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--ar-yellow-500)]/20 text-2xl">
-                  💡
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--ar-yellow-500)]/20">
+                  <Lightbulb
+                    className="h-6 w-6 text-[var(--ar-yellow-500)]"
+                    strokeWidth={2.25}
+                  />
                 </div>
                 <div className="flex-1">
                   <h3 className="text-lg font-bold">
-                    Bienvenido a <span className="text-[var(--ar-green-500)]">AccountantRace</span>
+                    Bienvenido,{" "}
+                    <span className="text-[var(--ar-green-500)]">
+                      {usuario.nombre}
+                    </span>
                   </h3>
                   <p className="mt-1 text-sm text-[var(--ar-blue-300)]">
-                    Responde preguntas, gana XP y construye tu oficina contable paso
-                    a paso. Tu primera meta: <strong className="text-white">5 preguntas correctas</strong> para
-                    desbloquear la etapa de Practicante.
+                    {usuario.etapaActual === 0
+                      ? "Responde 5 preguntas correctas para desbloquear la etapa de Practicante."
+                      : `Sigue avanzando para llegar a la etapa ${usuario.etapaActual + 1}.`}
                   </p>
                   <div className="mt-4 flex flex-wrap gap-2">
                     <button className="ar-bg-green-gradient rounded-lg px-5 py-2.5 text-sm font-bold uppercase tracking-wider text-white shadow-lg transition-transform hover:scale-[1.02] active:scale-[0.98]">
@@ -86,45 +99,41 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* Stats principales */}
             <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-              <StatCard
-                titulo="Retos"
-                valor={DEMO_USUARIO.retosCompletados}
-                icon="🎯"
-              />
+              <StatCard titulo="Retos" valor={0} Icon={Target} />
               <StatCard
                 titulo="Precisión"
-                valor={`${DEMO_USUARIO.precision}%`}
-                icon="🎓"
+                valor={`${usuario.precision}%`}
+                Icon={GraduationCap}
                 variant="green"
               />
               <StatCard
                 titulo="Racha"
-                valor={DEMO_USUARIO.rachaActual}
-                icon="🔥"
+                valor={usuario.rachaActual}
+                Icon={Flame}
                 variant="fire"
-                hint={DEMO_USUARIO.rachaActual === 0 ? "Inicia tu racha" : undefined}
+                hint={
+                  usuario.rachaActual === 0 ? "Inicia tu racha" : undefined
+                }
               />
               <StatCard
-                titulo="Preguntas disponibles"
+                titulo="Preguntas disp."
                 valor={preguntasDisp}
-                icon="📚"
-                hint={
-                  preguntasDisp === 0 ? "Genera con npm run seed:preguntas" : undefined
-                }
+                Icon={BookOpen}
               />
             </div>
 
-            {/* Cursos de esta etapa */}
             <div className="rounded-2xl border border-[var(--ar-gray-200)] bg-white p-5">
               <div className="mb-4 flex items-center justify-between">
-                <h3 className="text-base font-bold uppercase tracking-wider text-[var(--ar-navy-900)]">
+                <h3 className="flex items-center gap-2 text-base font-bold uppercase tracking-wider text-[var(--ar-navy-900)]">
+                  <BookOpen
+                    className="h-4 w-4 text-[var(--ar-navy-700)]"
+                    strokeWidth={2.5}
+                  />
                   Cursos en esta etapa
                 </h3>
                 <span className="rounded-full bg-[var(--ar-green-600)]/10 px-2.5 py-1 text-xs font-bold text-[var(--ar-green-600)]">
-                  {cursos.length}{" "}
-                  {cursos.length === 1 ? "curso" : "cursos"}
+                  {cursos.length} {cursos.length === 1 ? "curso" : "cursos"}
                 </span>
               </div>
               {cursos.length === 0 ? (
@@ -164,24 +173,21 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {/* Columna lateral */}
           <aside className="flex flex-col gap-4">
             <RankingPanel />
 
             <div className="rounded-xl border border-[var(--ar-gray-200)] bg-white p-4">
-              <h3 className="mb-3 text-sm font-bold uppercase tracking-wider text-[var(--ar-navy-900)]">
+              <h3 className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-[var(--ar-navy-900)]">
+                <Lock
+                  className="h-4 w-4 text-[var(--ar-navy-500)]"
+                  strokeWidth={2.5}
+                />
                 Elementos bloqueados
               </h3>
               <ul className="space-y-2 text-sm text-[var(--ar-navy-500)]">
-                {[
-                  "Biblioteca NIIF",
-                  "Asistentes",
-                  "Clientes",
-                  "Sala de reuniones",
-                  "Logo empresarial",
-                ].map((item) => (
+                {ELEMENTOS_BLOQUEADOS.map((item) => (
                   <li key={item} className="flex items-center gap-2">
-                    <span>🔒</span>
+                    <Lock className="h-3.5 w-3.5 shrink-0" strokeWidth={2.25} />
                     <span>{item}</span>
                   </li>
                 ))}
@@ -189,23 +195,16 @@ export default async function HomePage() {
             </div>
 
             <div className="rounded-xl border border-[var(--ar-gray-200)] bg-white p-4">
-              <h3 className="mb-2 text-sm font-bold uppercase tracking-wider text-[var(--ar-navy-900)]">
-                Avatar (demo)
-              </h3>
-              <p className="mb-3 text-xs text-[var(--ar-navy-500)]">
-                Cuando agregues login, el avatar cambia segun el genero del
-                usuario.
-              </p>
               <div className="flex items-center gap-3 rounded-lg bg-[var(--ar-gray-50)] p-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--ar-navy-900)] text-white">
-                  👤
+                  <UserIcon className="h-5 w-5" strokeWidth={2.25} />
                 </div>
                 <div className="min-w-0">
                   <div className="truncate text-sm font-semibold text-[var(--ar-navy-900)]">
-                    {DEMO_USUARIO.nombre}
+                    {nombreCompleto}
                   </div>
                   <div className="text-xs text-[var(--ar-navy-500)]">
-                    {etapa.nombre}
+                    {etapa.nombre} · {usuario.genero === "MUJER" ? "Mujer" : "Hombre"}
                   </div>
                 </div>
               </div>

@@ -1,7 +1,9 @@
+import { Coins, Gem } from "lucide-react";
 import { Logo } from "./Logo";
 import { NivelBadge } from "./NivelBadge";
 import { XPBar } from "./XPBar";
 import { CurrencyChip } from "./CurrencyChip";
+import { LogoutButton } from "./LogoutButton";
 
 interface TopBarProps {
   nivel: number;
@@ -25,8 +27,9 @@ export function TopBar({ nivel, xpActual, xpMeta, monedas, gemas }: TopBarProps)
         </div>
 
         <div className="flex items-center gap-2">
-          <CurrencyChip icon="🪙" value={monedas} color="yellow" />
-          <CurrencyChip icon="💎" value={gemas} color="blue" />
+          <CurrencyChip Icon={Coins} value={monedas} color="yellow" />
+          <CurrencyChip Icon={Gem} value={gemas} color="blue" />
+          <LogoutButton />
         </div>
       </div>
     </header>

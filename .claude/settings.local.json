@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(New-Item *)",
+      "PowerShell($dir = \"C:\\\\MacSoft\\\\RENACYT\\\\AccountantRace\\\\_extract_juego\"; cmd /c \"dir /B /S `\"$dir`\"\")",
+      "PowerShell(Test-Path *)",
+      "Bash(npm -v)",
+      "Bash(psql --version)",
+      "Bash(pg_isready)",
+      "PowerShell(cmd /c \"dir /B `\"C:\\\\Program Files\\\\PostgreSQL`\"\")",
+      "PowerShell($env:PGPASSWORD = \"postgres\"; $psql = \"C:\\\\Program Files\\\\PostgreSQL\\\\17\\\\bin\\\\psql.exe\"; & $psql -U postgres -h localhost -p 5432 -c \"SELECT version\\(\\);\" 2>&1)",
+      "PowerShell($env:PGPASSWORD = \"postgres\"; $psql = \"C:\\\\Program Files\\\\PostgreSQL\\\\17\\\\bin\\\\psql.exe\"; & $psql -U postgres -h localhost -p 5432 -tAc \"SELECT 1 FROM pg_database WHERE datname='accountantrace'\" 2>&1)",
+      "PowerShell($env:PGPASSWORD = \"postgres\"; $psql = \"C:\\\\Program Files\\\\PostgreSQL\\\\17\\\\bin\\\\psql.exe\"; & $psql -U postgres -h localhost -p 5432 -c \"CREATE DATABASE accountantrace WITH ENCODING='UTF8';\" 2>&1; & $psql -U postgres -h localhost -p 5432 -c \"\\\\l accountantrace\" 2>&1)",
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --use-npm --yes)",
+      "Bash(npx create-next-app@latest --help)",
+      "PowerShell(Get-ChildItem *)"
+    ]
+  }
+}

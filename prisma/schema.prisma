@@ -1,0 +1,218 @@
+// AccountantRace - schema de base de datos
+// Plataforma gamificada de retos y rankings academicos en ciencias contables
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============== USUARIOS ==============
+
+enum Genero {
+  HOMBRE
+  MUJER
+}
+
+enum Rol {
+  ESTUDIANTE
+  DOCENTE
+  ADMIN
+}
+
+model Usuario {
+  id            String     @id @default(cuid())
+  email         String     @unique
+  passwordHash  String
+  nombre        String
+  apellidos     String
+  genero        Genero
+  rol           Rol        @default(ESTUDIANTE)
+
+  // gamificacion
+  xpTotal       Int        @default(0)
+  monedas       Int        @default(0)
+  gemas         Int        @default(0)
+  etapaActual   Int        @default(0)  // 0..8
+  rachaActual   Int        @default(0)
+  rachaMaxima   Int        @default(0)
+  precision     Float      @default(0)  // porcentaje
+
+  // metadata
+  creadoEn      DateTime   @default(now())
+  ultimoLogin   DateTime?
+
+  // relaciones
+  progresos     Progreso[]
+  respuestas    Respuesta[]
+  logros        UsuarioLogro[]
+  partidas      Partida[]
+
+  @@index([xpTotal])
+  @@map("usuarios")
+}
+
+// ============== CURSOS Y CONTENIDO ==============
+
+model Curso {
+  id           Int        @id @default(autoincrement())
+  numero       Int        @unique           // del 1 al 53
+  ciclo        Int                          // 1..10
+  nombre       String
+  sumilla      String     @db.Text
+  esElectivo   Boolean    @default(false)
+  etapaMinima  Int        @default(0)       // etapa requerida para desbloquear (0..8)
+
+  preguntas    Pregunta[]
+  progresos    Progreso[]
+
+  @@index([ciclo])
+  @@index([etapaMinima])
+  @@map("cursos")
+}
+
+enum Dificultad {
+  FACIL
+  MEDIO
+  DIFICIL
+}
+
+model Pregunta {
+  id            String       @id @default(cuid())
+  cursoId       Int
+  curso         Curso        @relation(fields: [cursoId], references: [id], onDelete: Cascade)
+
+  enunciado     String       @db.Text
+  alternativas  Json         // ["opcion A", "opcion B", "opcion C", "opcion D"]
+  correctaIdx   Int          // 0..3
+  explicacion   String?      @db.Text
+  dificultad    Dificultad   @default(MEDIO)
+  etapa         Int          // 0..8 - a que etapa pertenece
+  conceptosClave String[]    @default([])
+
+  // metadata
+  generadaPorIA Boolean      @default(true)
+  modeloIA      String?      // "gemini-2.5-flash"
+  vecesUsada    Int          @default(0)
+  porcentajeAcierto Float    @default(0)
+  creadaEn      DateTime     @default(now())
+
+  respuestas    Respuesta[]
+
+  @@index([cursoId, etapa])
+  @@index([etapa, dificultad])
+  @@map("preguntas")
+}
+
+// ============== ETAPAS (catalogo estatico) ==============
+
+model Etapa {
+  id              Int      @id            // 0..8
+  nombre          String                  // "Estudiante", "Practicante Contable", etc
+  titulo          String                  // "Inicio Absoluto", "Practicante Contable"
+  descripcion     String   @db.Text
+  porcentajeMin   Float                   // 0, 5(preg), 15, 25, 40, 55, 70, 85, 100
+  xpRequerido     Int
+  imagenHombre    String                  // /escenarios/etapa0-hombre.jpeg
+  imagenMujer     String                  // /escenarios/etapa0-mujer.jpeg
+  recompensaMonedas Int    @default(0)
+  recompensaGemas Int      @default(0)
+  medalla         String?                 // "plata", "oro", "diamante", "elite"
+
+  @@map("etapas")
+}
+
+// ============== JUEGO ==============
+
+model Partida {
+  id           String     @id @default(cuid())
+  usuarioId    String
+  usuario      Usuario    @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  cursoId      Int?
+  etapa        Int
+
+  iniciadaEn   DateTime   @default(now())
+  finalizadaEn DateTime?
+
+  totalPreguntas    Int   @default(0)
+  totalCorrectas    Int   @default(0)
+  puntajeFinal      Int   @default(0)
+  tiempoTotalSeg    Int   @default(0)
+  rachaMaxPartida   Int   @default(0)
+
+  respuestas   Respuesta[]
+
+  @@index([usuarioId, finalizadaEn])
+  @@map("partidas")
+}
+
+model Respuesta {
+  id           String   @id @default(cuid())
+  usuarioId    String
+  usuario      Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  preguntaId   String
+  pregunta     Pregunta @relation(fields: [preguntaId], references: [id], onDelete: Cascade)
+  partidaId    String?
+  partida      Partida? @relation(fields: [partidaId], references: [id], onDelete: SetNull)
+
+  alternativaSeleccionada Int
+  esCorrecta   Boolean
+  tiempoSeg    Int             // tiempo que tomo responder
+  speedBonus   Boolean  @default(false)
+  xpGanado     Int      @default(0)
+
+  respondidaEn DateTime @default(now())
+
+  @@index([usuarioId, respondidaEn])
+  @@index([preguntaId])
+  @@map("respuestas")
+}
+
+model Progreso {
+  id           String   @id @default(cuid())
+  usuarioId    String
+  usuario      Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  cursoId      Int
+  curso        Curso    @relation(fields: [cursoId], references: [id], onDelete: Cascade)
+
+  preguntasResp      Int    @default(0)
+  preguntasCorrectas Int    @default(0)
+  xpAcumulado        Int    @default(0)
+  porcentaje         Float  @default(0)
+  completado         Boolean @default(false)
+
+  actualizadoEn DateTime @updatedAt
+
+  @@unique([usuarioId, cursoId])
+  @@index([usuarioId])
+  @@map("progresos")
+}
+
+// ============== LOGROS / GAMIFICACION ==============
+
+model Logro {
+  id           Int      @id @default(autoincrement())
+  codigo       String   @unique             // "primer_quiz", "racha_10", etc
+  nombre       String
+  descripcion  String
+  icono        String                       // emoji o ruta a imagen
+  xpRecompensa Int      @default(0)
+
+  usuarios     UsuarioLogro[]
+
+  @@map("logros")
+}
+
+model UsuarioLogro {
+  usuarioId       String
+  usuario         Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  logroId         Int
+  logro           Logro    @relation(fields: [logroId], references: [id], onDelete: Cascade)
+  desbloqueadoEn  DateTime @default(now())
+
+  @@id([usuarioId, logroId])
+  @@map("usuarios_logros")
+}

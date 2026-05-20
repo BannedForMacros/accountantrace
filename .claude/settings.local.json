@@ -13,7 +13,15 @@
       "PowerShell($env:PGPASSWORD = \"postgres\"; $psql = \"C:\\\\Program Files\\\\PostgreSQL\\\\17\\\\bin\\\\psql.exe\"; & $psql -U postgres -h localhost -p 5432 -c \"CREATE DATABASE accountantrace WITH ENCODING='UTF8';\" 2>&1; & $psql -U postgres -h localhost -p 5432 -c \"\\\\l accountantrace\" 2>&1)",
       "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --use-npm --yes)",
       "Bash(npx create-next-app@latest --help)",
-      "PowerShell(Get-ChildItem *)"
+      "PowerShell(Get-ChildItem *)",
+      "PowerShell(cmd /c \"dir /B `\"C:\\\\MacSoft\\\\RENACYT\\\\AccountantRace\\\\_tmp_next`\"\")",
+      "PowerShell(cmd /c \"rmdir /S /Q `\"C:\\\\MacSoft\\\\RENACYT\\\\AccountantRace\\\\_tmp_next`\"\" 2>&1; Test-Path \"C:\\\\MacSoft\\\\RENACYT\\\\AccountantRace\\\\_tmp_next\")",
+      "Read(//c//**)",
+      "Bash(rm -rf \"C:/MacSoft/RENACYT/AccountantRace/_tmp_next\")",
+      "Bash(cd /c)",
+      "Bash(npm install *)",
+      "Bash(npx prisma *)",
+      "PowerShell($env:PGPASSWORD = \"postgres\"; $psql = \"C:\\\\Program Files\\\\PostgreSQL\\\\17\\\\bin\\\\psql.exe\"; & $psql -U postgres -h localhost -p 5432 -d accountantrace -c \"\\\\dt\" 2>&1)"
     ]
   }
 }

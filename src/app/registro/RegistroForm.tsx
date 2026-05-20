@@ -4,13 +4,13 @@ import { useActionState, useState } from "react";
 import {
   User,
   Mail,
-  Lock,
   UserPlus,
   AlertCircle,
   PersonStanding,
   CircleUserRound,
 } from "lucide-react";
 import { Field } from "@/components/auth/Field";
+import { PasswordField } from "@/components/auth/PasswordField";
 import { registrarUsuario, type RegistroState } from "./actions";
 
 const INITIAL: RegistroState = {};
@@ -56,12 +56,10 @@ export function RegistroForm() {
         placeholder="tu@correo.com"
         required
       />
-      <Field
+      <PasswordField
         label="Contrasena"
-        Icon={Lock}
         id="password"
         name="password"
-        type="password"
         autoComplete="new-password"
         placeholder="Minimo 6 caracteres"
         required

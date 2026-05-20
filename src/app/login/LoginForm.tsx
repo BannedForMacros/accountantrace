@@ -1,8 +1,9 @@
 "use client";
 
 import { useActionState } from "react";
-import { Mail, Lock, LogIn, AlertCircle } from "lucide-react";
+import { Mail, LogIn, AlertCircle } from "lucide-react";
 import { Field } from "@/components/auth/Field";
+import { PasswordField } from "@/components/auth/PasswordField";
 import { loginUsuario, type LoginState } from "./actions";
 
 const INITIAL: LoginState = {};
@@ -22,12 +23,10 @@ export function LoginForm() {
         placeholder="tu@correo.com"
         required
       />
-      <Field
+      <PasswordField
         label="Contrasena"
-        Icon={Lock}
         id="password"
         name="password"
-        type="password"
         autoComplete="current-password"
         placeholder="••••••••"
         required

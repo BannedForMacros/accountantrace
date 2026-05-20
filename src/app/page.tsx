@@ -88,12 +88,18 @@ export default async function HomePage() {
                       : `Sigue avanzando para llegar a la etapa ${usuario.etapaActual + 1}.`}
                   </p>
                   <div className="mt-4 flex flex-wrap gap-2">
-                    <button className="ar-bg-green-gradient rounded-lg px-5 py-2.5 text-sm font-bold uppercase tracking-wider text-white shadow-lg transition-transform hover:scale-[1.02] active:scale-[0.98]">
+                    <a
+                      href="/retos"
+                      className="ar-bg-green-gradient rounded-lg px-5 py-2.5 text-sm font-bold uppercase tracking-wider text-white shadow-lg transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                    >
                       Empezar reto
-                    </button>
-                    <button className="rounded-lg border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/10">
+                    </a>
+                    <a
+                      href="/retos"
+                      className="rounded-lg border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/10"
+                    >
                       Ver cursos
-                    </button>
+                    </a>
                   </div>
                 </div>
               </div>

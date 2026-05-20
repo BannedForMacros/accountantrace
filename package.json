@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "seed:etapas": "tsx prisma/seeds/etapas.ts",
-    "seed:cursos": "tsx prisma/seeds/cursos.ts"
+    "seed:cursos": "tsx prisma/seeds/cursos.ts",
+    "seed:preguntas": "tsx prisma/seeds/preguntas.ts"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

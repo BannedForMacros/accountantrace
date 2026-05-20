@@ -1,26 +1,66 @@
 @import "tailwindcss";
 
+/* ===========================================================
+   AccountantRace - Paleta extraida del logo
+   =========================================================== */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Brand */
+  --ar-navy-900: #0A2540;
+  --ar-navy-700: #1A3A6B;
+  --ar-navy-500: #2C5494;
+  --ar-green-600: #16A34A;
+  --ar-green-500: #22C55E;
+  --ar-blue-500: #3B82F6;
+  --ar-blue-300: #93C5FD;
+  --ar-yellow-500: #EAB308;
+  --ar-orange-500: #F97316;
+  --ar-white: #FFFFFF;
+  --ar-gray-50: #F9FAFB;
+  --ar-gray-100: #F3F4F6;
+  --ar-gray-200: #E5E7EB;
+  --ar-gray-700: #374151;
+
+  /* Tema base */
+  --background: var(--ar-white);
+  --foreground: var(--ar-navy-900);
 }
 
 @theme inline {
+  /* Tokens base que usa Tailwind */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Tokens de marca: usa con clases tipo bg-ar-navy, text-ar-green, etc */
+  --color-ar-navy-900: var(--ar-navy-900);
+  --color-ar-navy-700: var(--ar-navy-700);
+  --color-ar-navy-500: var(--ar-navy-500);
+  --color-ar-green-600: var(--ar-green-600);
+  --color-ar-green-500: var(--ar-green-500);
+  --color-ar-blue-500: var(--ar-blue-500);
+  --color-ar-blue-300: var(--ar-blue-300);
+  --color-ar-yellow-500: var(--ar-yellow-500);
+  --color-ar-orange-500: var(--ar-orange-500);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+}
+
+/* Gradient firma del logo: navy -> blue */
+.ar-bg-navy-gradient {
+  background: linear-gradient(135deg, var(--ar-navy-900) 0%, var(--ar-navy-700) 100%);
+}
+
+/* Gradient para botones primarios (verde Race) */
+.ar-bg-green-gradient {
+  background: linear-gradient(135deg, var(--ar-green-600) 0%, var(--ar-green-500) 100%);
+}
+
+/* Para racha / fuego */
+.ar-bg-fire-gradient {
+  background: linear-gradient(135deg, var(--ar-orange-500) 0%, var(--ar-yellow-500) 100%);
 }

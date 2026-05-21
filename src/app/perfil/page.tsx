@@ -38,7 +38,6 @@ export default async function PerfilPage() {
     orderBy: { finalizadaEn: "desc" },
     take: 10,
     include: {
-      // @ts-expect-error - tipo derivado de relacion opcional
       curso: { select: { nombre: true, ciclo: true } },
     },
   });
@@ -181,10 +180,6 @@ export default async function PerfilPage() {
             ) : (
               <ul className="divide-y divide-[var(--ar-gray-100)]">
                 {partidas.map((p) => {
-                  type PartidaConCurso = typeof p & {
-                    curso?: { nombre: string; ciclo: number } | null;
-                  };
-                  const pc = p as PartidaConCurso;
                   const precision =
                     p.totalPreguntas > 0
                       ? Math.round((p.totalCorrectas / p.totalPreguntas) * 100)
@@ -206,7 +201,7 @@ export default async function PerfilPage() {
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="truncate text-sm font-semibold text-[var(--ar-navy-900)]">
-                          {pc.curso?.nombre ?? "Curso eliminado"}
+                          {p.curso?.nombre ?? "Curso eliminado"}
                         </div>
                         <div className="text-[11px] text-[var(--ar-navy-500)]">
                           {p.totalCorrectas}/{p.totalPreguntas} correctas · Etapa{" "}

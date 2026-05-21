@@ -27,7 +27,8 @@
       "PowerShell($env:PGPASSWORD = \"postgres\"; $psql = \"C:\\\\Program Files\\\\PostgreSQL\\\\17\\\\bin\\\\psql.exe\"; & $psql -U postgres -h localhost -p 5432 -d accountantrace -c \"SELECT id, nombre, \"\"porcentajeMin\"\" AS pct, \"\"xpRequerido\"\" AS xp, medalla FROM etapas ORDER BY id;\" 2>&1)",
       "PowerShell($env:PGPASSWORD = \"postgres\"; $psql = \"C:\\\\Program Files\\\\PostgreSQL\\\\17\\\\bin\\\\psql.exe\"; & $psql -U postgres -h localhost -p 5432 -d accountantrace -c 'SELECT id, nombre, \\\\\"porcentajeMin\\\\\", \\\\\"xpRequerido\\\\\", medalla FROM etapas ORDER BY id;')",
       "Bash(node -e \"console.log\\(require\\('crypto'\\).randomBytes\\(32\\).toString\\('hex'\\)\\)\")",
-      "Bash(taskkill /PID 24372 /F)"
+      "Bash(taskkill /PID 24372 /F)",
+      "PowerShell($env:PGPASSWORD = \"postgres\"; $psql = \"C:\\\\Program Files\\\\PostgreSQL\\\\17\\\\bin\\\\psql.exe\"; & $psql -U postgres -h localhost -p 5432 -d accountantrace -c \"\\\\d partidas\" 2>&1 | Select-String -Pattern \"\\(cursoId|fkey|references|Foreign\\)\")"
     ]
   }
 }

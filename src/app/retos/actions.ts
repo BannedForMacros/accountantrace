@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 import { calcularResultado, determinarEtapaPorXP } from "@/lib/scoring";
+import { evaluarLogros } from "@/lib/logros";
 import { Dificultad } from "@/generated/prisma";
 
 export interface RespuestaCliente {
@@ -26,6 +27,7 @@ export interface ResultadoFinal {
   etapaDespues: number;
   subioEtapa: boolean;
   precisionPct: number;
+  logrosNuevos: { codigo: string; nombre: string; icono: string; xpRecompensa: number }[];
   detalle: {
     preguntaId: string;
     esCorrecta: boolean;
@@ -187,8 +189,22 @@ export async function finalizarPartida(
     },
   });
 
+  // Evaluar logros con el estado posterior a la partida
+  const speedBonusEnPartida = detalle.filter((d) => d.speedBonus).length;
+  const logrosNuevos = await evaluarLogros(usuario.id, {
+    xpTotal: xpDespues,
+    rachaMaxima: Math.max(usuario.rachaMaxima, rachaMaxPartida),
+    etapaActual: etapaConRegla5,
+    totalCorrectas: totalCorrectasUsuario,
+    speedBonusEnPartida,
+    rachaMaxEnPartida: rachaMaxPartida,
+    totalPreguntasEnPartida: input.respuestas.length,
+    totalCorrectasEnPartida: totalCorrectas,
+  });
+
   revalidatePath("/");
   revalidatePath("/retos");
+  revalidatePath("/logros");
 
   const subioEtapa = etapaConRegla5 > etapaAntes;
   const precisionPct =
@@ -210,6 +226,7 @@ export async function finalizarPartida(
     etapaDespues: etapaConRegla5,
     subioEtapa,
     precisionPct,
+    logrosNuevos,
     detalle,
   };
 }

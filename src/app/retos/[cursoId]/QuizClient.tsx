@@ -407,6 +407,26 @@ function ResultadoView({
           </div>
         )}
 
+        {resultado.logrosNuevos.length > 0 && (
+          <div className="ar-bg-fire-gradient mb-4 rounded-2xl p-5 text-white shadow-xl">
+            <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest">
+              <Sparkles className="h-4 w-4" strokeWidth={2.5} />
+              Logros desbloqueados
+            </div>
+            <ul className="space-y-1">
+              {resultado.logrosNuevos.map((l) => (
+                <li
+                  key={l.codigo}
+                  className="flex items-center justify-between rounded-lg bg-white/10 px-3 py-2"
+                >
+                  <span className="text-sm font-semibold">{l.nombre}</span>
+                  <span className="text-xs font-bold">+{l.xpRecompensa} XP</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         <div className="overflow-hidden rounded-3xl bg-white shadow-2xl">
           <div className="ar-bg-navy-gradient px-6 py-5 text-center text-white">
             <div className="text-[10px] font-bold uppercase tracking-widest text-[var(--ar-blue-300)]">

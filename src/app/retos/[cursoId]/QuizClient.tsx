@@ -51,9 +51,9 @@ type Estado = "INTRO" | "JUGANDO" | "FEEDBACK" | "ENVIANDO" | "RESULTADO";
 const LETRAS = ["A", "B", "C", "D"];
 
 const DIF_COLOR: Record<string, string> = {
-  FACIL: "bg-[var(--ar-green-600)]/10 text-[var(--ar-green-600)]",
-  MEDIO: "bg-[var(--ar-blue-500)]/10 text-[var(--ar-blue-500)]",
-  DIFICIL: "bg-[var(--ar-orange-500)]/10 text-[var(--ar-orange-500)]",
+  FACIL: "bg-[var(--ar-green-600)]/15 text-[var(--ar-green-400)]",
+  MEDIO: "bg-[var(--ar-blue-500)]/15 text-[var(--ar-blue-300)]",
+  DIFICIL: "bg-[var(--ar-orange-500)]/15 text-[var(--ar-orange-500)]",
 };
 
 export function QuizClient({ curso, preguntas }: QuizClientProps) {
@@ -88,7 +88,7 @@ export function QuizClient({ curso, preguntas }: QuizClientProps) {
       setTiempoRestante(restante);
       if (restante <= 0) {
         limpiarTimer();
-        responder(-1); // se acabo el tiempo
+        responder(-1);
       }
     }, 100);
   }
@@ -150,45 +150,45 @@ export function QuizClient({ curso, preguntas }: QuizClientProps) {
   // ============== INTRO ==============
   if (estado === "INTRO") {
     return (
-      <div className="ar-bg-navy-gradient flex min-h-screen items-center justify-center p-6">
-        <div className="relative w-full max-w-lg overflow-hidden rounded-3xl bg-white shadow-2xl">
-          <div className="ar-bg-navy-gradient px-6 py-5 text-white">
-            <div className="text-[10px] font-bold uppercase tracking-widest text-[var(--ar-blue-300)]">
+      <div className="flex min-h-screen items-center justify-center bg-[#060E1A] p-6">
+        <div className="relative w-full max-w-lg overflow-hidden rounded-3xl shadow-2xl ring-1 ring-white/10">
+          <div className="bg-gradient-to-r from-[var(--ar-navy-900)] to-[var(--ar-navy-700)] px-6 py-5 text-white">
+            <div className="text-[10px] font-bold uppercase tracking-widest text-[var(--ar-green-400)]">
               Ciclo {curso.ciclo} · Etapa {curso.etapaMinima}
             </div>
-            <h1 className="mt-1 text-xl font-extrabold">{curso.nombre}</h1>
+            <h1 className="mt-1 text-xl font-black">{curso.nombre}</h1>
           </div>
-          <div className="px-6 py-6">
+          <div className="bg-[rgba(10,37,64,0.95)] px-6 py-6">
             <div className="grid grid-cols-3 gap-3 text-center">
-              <div className="rounded-xl border border-[var(--ar-gray-200)] p-3">
-                <div className="text-2xl font-extrabold tabular-nums text-[var(--ar-navy-900)]">
+              <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                <div className="text-2xl font-black tabular-nums text-white">
                   {totalPreg}
                 </div>
-                <div className="text-[10px] font-semibold uppercase tracking-wider text-[var(--ar-navy-500)]">
+                <div className="text-[10px] font-semibold uppercase tracking-wider text-[var(--ar-blue-300)]/50">
                   Preguntas
                 </div>
               </div>
-              <div className="rounded-xl border border-[var(--ar-gray-200)] p-3">
-                <div className="text-2xl font-extrabold tabular-nums text-[var(--ar-navy-900)]">
+              <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                <div className="text-2xl font-black tabular-nums text-white">
                   {TIEMPO_LIMITE_SEG}s
                 </div>
-                <div className="text-[10px] font-semibold uppercase tracking-wider text-[var(--ar-navy-500)]">
+                <div className="text-[10px] font-semibold uppercase tracking-wider text-[var(--ar-blue-300)]/50">
                   Por pregunta
                 </div>
               </div>
-              <div className="rounded-xl border border-[var(--ar-gray-200)] p-3">
-                <div className="flex items-center justify-center gap-1 text-2xl font-extrabold tabular-nums text-[var(--ar-blue-500)]">
+              <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                <div className="flex items-center justify-center gap-1 text-2xl font-black tabular-nums text-[var(--ar-blue-300)]">
                   <Zap className="h-5 w-5" strokeWidth={2.5} />
                   {SPEED_BONUS_SEG}s
                 </div>
-                <div className="text-[10px] font-semibold uppercase tracking-wider text-[var(--ar-navy-500)]">
+                <div className="text-[10px] font-semibold uppercase tracking-wider text-[var(--ar-blue-300)]/50">
                   Speed bonus
                 </div>
               </div>
             </div>
 
-            <div className="mt-4 rounded-lg bg-[var(--ar-gray-50)] p-3 text-xs text-[var(--ar-navy-700)]">
-              <strong>Reglas:</strong> respuesta correcta = XP. Si respondes en
+            <div className="mt-4 rounded-lg border border-white/5 bg-white/5 p-3 text-xs text-[var(--ar-blue-300)]/60">
+              <strong className="text-white">Reglas:</strong> respuesta correcta = XP. Si respondes en
               menos de {SPEED_BONUS_SEG}s, recibes bonus extra. Encadena correctas
               para subir tu racha.
             </div>
@@ -196,13 +196,13 @@ export function QuizClient({ curso, preguntas }: QuizClientProps) {
             <div className="mt-5 flex gap-2">
               <Link
                 href="/retos"
-                className="flex items-center justify-center gap-2 rounded-lg border border-[var(--ar-gray-200)] px-4 py-3 text-sm font-semibold text-[var(--ar-navy-700)] transition-colors hover:bg-[var(--ar-gray-50)]"
+                className="game-btn game-btn-secondary"
               >
                 <ArrowLeft className="h-4 w-4" /> Volver
               </Link>
               <button
                 onClick={comenzar}
-                className="ar-bg-green-gradient flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-bold uppercase tracking-wider text-white shadow-lg transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                className="game-btn game-btn-primary flex-1 justify-center"
               >
                 <Play className="h-4 w-4" strokeWidth={2.5} /> Comenzar
               </button>
@@ -223,80 +223,72 @@ export function QuizClient({ curso, preguntas }: QuizClientProps) {
   const speedActivo = tiempoRestante > TIEMPO_LIMITE_SEG - SPEED_BONUS_SEG;
 
   return (
-    <div className="flex min-h-screen flex-col bg-[var(--ar-gray-50)]">
-      {/* Header del quiz */}
-      <header className="border-b border-[var(--ar-gray-200)] bg-white">
+    <div className="flex min-h-screen flex-col bg-[#060E1A]">
+      <header className="border-b border-[rgba(59,130,246,0.15)] bg-[rgba(10,37,64,0.92)] backdrop-blur-md">
         <div className="mx-auto flex max-w-3xl items-center gap-4 px-4 py-3">
           <Link
             href="/retos"
-            className="rounded-full p-2 text-[var(--ar-navy-500)] transition-colors hover:bg-[var(--ar-gray-100)]"
+            className="rounded-full p-2 text-[var(--ar-blue-300)]/50 transition-colors hover:bg-white/10 hover:text-white"
             title="Abandonar"
           >
             <ArrowLeft className="h-5 w-5" />
           </Link>
           <div className="flex-1 min-w-0">
-            <div className="truncate text-xs font-semibold text-[var(--ar-navy-500)]">
+            <div className="truncate text-xs font-semibold text-[var(--ar-blue-300)]/50">
               {curso.nombre}
             </div>
-            <div className="text-base font-bold text-[var(--ar-navy-900)]">
-              Pregunta {idx + 1} <span className="text-[var(--ar-navy-500)] text-sm">/ {totalPreg}</span>
+            <div className="text-base font-bold text-white">
+              Pregunta {idx + 1} <span className="text-[var(--ar-blue-300)]/50 text-sm">/ {totalPreg}</span>
             </div>
           </div>
           {racha >= 2 && (
-            <div className="flex items-center gap-1 rounded-full bg-[var(--ar-orange-500)]/10 px-3 py-1 text-[var(--ar-orange-500)]">
-              <Flame className="h-4 w-4" strokeWidth={2.5} />
+            <div className="flex items-center gap-1 rounded-full bg-[var(--ar-orange-500)]/15 px-3 py-1 text-[var(--ar-orange-500)]">
+              <Flame className="h-4 w-4 drop-shadow-[0_0_6px_rgba(249,115,22,0.5)]" strokeWidth={2.5} />
               <span className="text-sm font-bold tabular-nums">x{racha}</span>
             </div>
           )}
         </div>
-        {/* Barra de progreso de preguntas */}
-        <div className="h-1 w-full bg-[var(--ar-gray-100)]">
+        <div className="h-1 w-full bg-[var(--ar-navy-900)]">
           <div
-            className="ar-bg-green-gradient h-full transition-all"
+            className="h-full bg-gradient-to-r from-[var(--ar-green-600)] to-[var(--ar-green-400)] transition-all"
             style={{ width: `${((idx + (estado === "FEEDBACK" ? 1 : 0)) / totalPreg) * 100}%` }}
           />
         </div>
       </header>
 
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6">
-        {/* Timer */}
         <div className="mb-4">
           <div className="mb-1 flex items-center justify-between">
-            <div className="flex items-center gap-2 text-sm font-semibold text-[var(--ar-navy-700)]">
-              <Clock className="h-4 w-4" strokeWidth={2.25} />
+            <div className="flex items-center gap-2 text-sm font-semibold text-white">
+              <Clock className="h-4 w-4 text-[var(--ar-blue-300)]" strokeWidth={2.25} />
               {tiempoRestante.toFixed(1)}s
             </div>
             {speedActivo && estado === "JUGANDO" && (
-              <div className="flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-[var(--ar-blue-500)]">
-                <Zap className="h-3.5 w-3.5" strokeWidth={2.5} />
+              <div className="flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-[var(--ar-blue-300)]">
+                <Zap className="h-3.5 w-3.5 drop-shadow-[0_0_4px_rgba(59,130,246,0.5)]" strokeWidth={2.5} />
                 Speed bonus activo
               </div>
             )}
-            <span
-              className={`rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
-                DIF_COLOR[pregunta.dificultad]
-              }`}
-            >
+            <span className={`rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${DIF_COLOR[pregunta.dificultad]}`}>
               {pregunta.dificultad}
             </span>
           </div>
-          <div className="h-2 w-full overflow-hidden rounded-full bg-[var(--ar-gray-200)]">
+          <div className="h-2.5 w-full overflow-hidden rounded-full bg-[var(--ar-navy-900)] ring-1 ring-inset ring-white/5">
             <div
               className={`h-full transition-all ${
                 speedActivo
-                  ? "ar-bg-fire-gradient"
+                  ? "bg-gradient-to-r from-[var(--ar-orange-500)] to-[var(--ar-yellow-500)]"
                   : tiempoRestante < 5
                     ? "bg-red-500"
-                    : "bg-[var(--ar-navy-500)]"
+                    : "bg-[var(--ar-blue-500)]"
               }`}
               style={{ width: `${pctTiempo}%` }}
             />
           </div>
         </div>
 
-        {/* Pregunta */}
-        <div className="rounded-2xl border border-[var(--ar-gray-200)] bg-white p-6 shadow-sm">
-          <p className="mb-5 text-base font-medium leading-relaxed text-[var(--ar-navy-900)]">
+        <div className="game-card p-6">
+          <p className="mb-5 text-base font-medium leading-relaxed text-white">
             {pregunta.enunciado}
           </p>
 
@@ -306,15 +298,14 @@ export function QuizClient({ curso, preguntas }: QuizClientProps) {
               const esSeleccionada = i === seleccion;
               const enFeedback = estado === "FEEDBACK";
 
-              let cls = "border-[var(--ar-gray-200)] bg-white hover:border-[var(--ar-blue-500)]/40 hover:bg-[var(--ar-blue-500)]/5";
+              let cls = "border-white/10 bg-white/5 hover:border-[var(--ar-blue-500)]/40 hover:bg-[var(--ar-blue-500)]/10 text-white";
               if (enFeedback) {
                 if (esCorrecta) {
-                  cls =
-                    "border-[var(--ar-green-600)] bg-[var(--ar-green-600)]/10 text-[var(--ar-green-600)]";
+                  cls = "border-[var(--ar-green-500)] bg-[var(--ar-green-600)]/15 text-[var(--ar-green-400)] shadow-[0_0_15px_rgba(22,163,74,0.15)]";
                 } else if (esSeleccionada) {
-                  cls = "border-red-500 bg-red-50 text-red-700";
+                  cls = "border-red-500 bg-red-500/10 text-red-400";
                 } else {
-                  cls = "border-[var(--ar-gray-200)] bg-white opacity-50";
+                  cls = "border-white/5 bg-white/[0.02] opacity-40 text-white/50";
                 }
               }
 
@@ -323,25 +314,25 @@ export function QuizClient({ curso, preguntas }: QuizClientProps) {
                   key={i}
                   disabled={estado !== "JUGANDO"}
                   onClick={() => responder(i)}
-                  className={`flex items-start gap-3 rounded-xl border-2 p-3 text-left text-sm font-medium transition-all disabled:cursor-default ${cls}`}
+                  className={`flex items-start gap-3 rounded-xl border-2 p-3.5 text-left text-sm font-medium transition-all disabled:cursor-default ${cls}`}
                 >
                   <span
                     className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold ${
                       enFeedback && esCorrecta
-                        ? "border-[var(--ar-green-600)] bg-[var(--ar-green-600)] text-white"
+                        ? "border-[var(--ar-green-500)] bg-[var(--ar-green-500)] text-white"
                         : enFeedback && esSeleccionada
                           ? "border-red-500 bg-red-500 text-white"
-                          : "border-[var(--ar-gray-200)] text-[var(--ar-navy-700)]"
+                          : "border-white/20 text-white/60"
                     }`}
                   >
                     {LETRAS[i]}
                   </span>
                   <span className="flex-1">{alt}</span>
                   {enFeedback && esCorrecta && (
-                    <CheckCircle2 className="h-5 w-5 text-[var(--ar-green-600)]" />
+                    <CheckCircle2 className="h-5 w-5 text-[var(--ar-green-400)]" />
                   )}
                   {enFeedback && esSeleccionada && !esCorrecta && (
-                    <XCircle className="h-5 w-5 text-red-500" />
+                    <XCircle className="h-5 w-5 text-red-400" />
                   )}
                 </button>
               );
@@ -349,19 +340,18 @@ export function QuizClient({ curso, preguntas }: QuizClientProps) {
           </div>
 
           {estado === "FEEDBACK" && pregunta.explicacion && (
-            <div className="mt-4 rounded-lg border border-[var(--ar-blue-500)]/20 bg-[var(--ar-blue-500)]/5 p-3 text-sm text-[var(--ar-navy-700)]">
-              <strong className="text-[var(--ar-blue-500)]">Explicación: </strong>
+            <div className="mt-4 rounded-lg border border-[var(--ar-blue-500)]/20 bg-[var(--ar-blue-500)]/10 p-3 text-sm text-[var(--ar-blue-300)]">
+              <strong className="text-white">Explicacion: </strong>
               {pregunta.explicacion}
             </div>
           )}
         </div>
 
-        {/* Boton siguiente */}
         {estado === "FEEDBACK" && (
           <div className="mt-4 flex justify-end">
             <button
               onClick={siguiente}
-              className="ar-bg-navy-gradient flex items-center gap-2 rounded-lg px-6 py-3 text-sm font-bold uppercase tracking-wider text-white shadow-lg transition-transform hover:scale-[1.02] active:scale-[0.98]"
+              className="game-btn game-btn-primary"
             >
               {idx + 1 >= totalPreg ? "Ver resultado" : "Siguiente"}
               <ChevronRight className="h-4 w-4" strokeWidth={2.5} />
@@ -370,7 +360,7 @@ export function QuizClient({ curso, preguntas }: QuizClientProps) {
         )}
 
         {estado === "ENVIANDO" && (
-          <div className="mt-4 text-center text-sm text-[var(--ar-navy-500)]">
+          <div className="mt-4 text-center text-sm text-[var(--ar-blue-300)]/50">
             Guardando partida...
           </div>
         )}
@@ -391,16 +381,16 @@ function ResultadoView({
   const pctAciertos = Math.round(resultado.precisionPct);
 
   return (
-    <div className="ar-bg-navy-gradient flex min-h-screen items-start justify-center overflow-y-auto p-6">
+    <div className="flex min-h-screen items-start justify-center overflow-y-auto bg-[#060E1A] p-6">
       <div className="my-8 w-full max-w-xl">
         {resultado.subioEtapa && (
-          <div className="ar-bg-green-gradient mb-4 flex items-center gap-3 rounded-2xl p-5 text-white shadow-xl">
-            <Sparkles className="h-8 w-8 shrink-0" strokeWidth={2.5} />
+          <div className="mb-4 flex items-center gap-3 rounded-2xl bg-gradient-to-r from-[var(--ar-green-600)] to-[var(--ar-green-500)] p-5 text-white shadow-xl shadow-[var(--ar-green-600)]/20">
+            <Sparkles className="h-8 w-8 shrink-0 drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]" strokeWidth={2.5} />
             <div>
               <div className="text-xs font-bold uppercase tracking-widest opacity-90">
-                ¡Nivel desbloqueado!
+                Nivel desbloqueado!
               </div>
-              <div className="text-lg font-extrabold">
+              <div className="text-lg font-black">
                 Avanzaste a la Etapa {resultado.etapaDespues}
               </div>
             </div>
@@ -408,7 +398,7 @@ function ResultadoView({
         )}
 
         {resultado.logrosNuevos.length > 0 && (
-          <div className="ar-bg-fire-gradient mb-4 rounded-2xl p-5 text-white shadow-xl">
+          <div className="mb-4 rounded-2xl bg-gradient-to-r from-[var(--ar-orange-500)] to-[var(--ar-yellow-500)] p-5 text-white shadow-xl shadow-[var(--ar-orange-500)]/20">
             <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest">
               <Sparkles className="h-4 w-4" strokeWidth={2.5} />
               Logros desbloqueados
@@ -417,7 +407,7 @@ function ResultadoView({
               {resultado.logrosNuevos.map((l) => (
                 <li
                   key={l.codigo}
-                  className="flex items-center justify-between rounded-lg bg-white/10 px-3 py-2"
+                  className="flex items-center justify-between rounded-lg bg-white/15 px-3 py-2"
                 >
                   <span className="text-sm font-semibold">{l.nombre}</span>
                   <span className="text-xs font-bold">+{l.xpRecompensa} XP</span>
@@ -427,63 +417,43 @@ function ResultadoView({
           </div>
         )}
 
-        <div className="overflow-hidden rounded-3xl bg-white shadow-2xl">
-          <div className="ar-bg-navy-gradient px-6 py-5 text-center text-white">
-            <div className="text-[10px] font-bold uppercase tracking-widest text-[var(--ar-blue-300)]">
+        <div className="overflow-hidden rounded-3xl shadow-2xl ring-1 ring-white/10">
+          <div className="bg-gradient-to-r from-[var(--ar-navy-900)] to-[var(--ar-navy-700)] px-6 py-5 text-center text-white">
+            <div className="text-[10px] font-bold uppercase tracking-widest text-[var(--ar-green-400)]">
               Resultado del reto
             </div>
             <h1 className="mt-1 line-clamp-1 text-lg font-bold">{curso.nombre}</h1>
             <div className="mt-3 flex items-center justify-center gap-2">
-              <Trophy className="h-8 w-8 text-[var(--ar-yellow-500)]" />
-              <span className="text-4xl font-extrabold tabular-nums">
+              <Trophy className="h-8 w-8 text-[var(--ar-yellow-500)] drop-shadow-[0_0_10px_rgba(234,179,8,0.5)]" />
+              <span className="text-4xl font-black tabular-nums">
                 {resultado.totalCorrectas}
-                <span className="text-2xl text-[var(--ar-blue-300)]">
+                <span className="text-2xl text-[var(--ar-blue-300)]/60">
                   /{resultado.totalPreguntas}
                 </span>
               </span>
             </div>
-            <div className="mt-1 text-sm font-semibold text-[var(--ar-blue-300)]">
-              {pctAciertos}% de precisión
+            <div className="mt-1 text-sm font-semibold text-[var(--ar-blue-300)]/60">
+              {pctAciertos}% de precision
             </div>
           </div>
 
-          <div className="px-6 py-6">
+          <div className="bg-[rgba(10,37,64,0.95)] px-6 py-6">
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              <Stat
-                label="XP ganado"
-                value={`+${resultado.puntajeFinal}`}
-                Icon={TrendingUp}
-                color="green"
-              />
-              <Stat
-                label="Monedas"
-                value={`+${resultado.monedasGanadas}`}
-                Icon={Coins}
-                color="yellow"
-              />
-              <Stat
-                label="Gemas"
-                value={`+${resultado.gemasGanadas}`}
-                Icon={Gem}
-                color="blue"
-              />
-              <Stat
-                label="Racha máx."
-                value={resultado.rachaMaxPartida}
-                Icon={Flame}
-                color="orange"
-              />
+              <Stat label="XP ganado" value={`+${resultado.puntajeFinal}`} Icon={TrendingUp} color="green" />
+              <Stat label="Monedas" value={`+${resultado.monedasGanadas}`} Icon={Coins} color="yellow" />
+              <Stat label="Gemas" value={`+${resultado.gemasGanadas}`} Icon={Gem} color="blue" />
+              <Stat label="Racha max." value={resultado.rachaMaxPartida} Icon={Flame} color="orange" />
             </div>
 
-            <div className="mt-5 rounded-xl border border-[var(--ar-gray-200)] bg-[var(--ar-gray-50)] p-4">
-              <div className="text-[10px] font-bold uppercase tracking-wider text-[var(--ar-navy-500)]">
+            <div className="mt-5 rounded-xl border border-white/10 bg-white/5 p-4">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-[var(--ar-blue-300)]/50">
                 XP total acumulado
               </div>
               <div className="mt-1 flex items-baseline gap-2">
-                <span className="text-2xl font-extrabold tabular-nums text-[var(--ar-navy-900)]">
+                <span className="text-2xl font-black tabular-nums text-white">
                   {resultado.xpDespues.toLocaleString("es-PE")}
                 </span>
-                <span className="text-sm text-[var(--ar-navy-500)]">
+                <span className="text-sm text-[var(--ar-blue-300)]/40">
                   (antes: {resultado.xpAntes.toLocaleString("es-PE")})
                 </span>
               </div>
@@ -492,13 +462,13 @@ function ResultadoView({
             <div className="mt-5 flex gap-2">
               <button
                 onClick={() => router.push("/retos")}
-                className="flex items-center justify-center gap-2 rounded-lg border border-[var(--ar-gray-200)] px-4 py-3 text-sm font-semibold text-[var(--ar-navy-700)] transition-colors hover:bg-[var(--ar-gray-50)]"
+                className="game-btn game-btn-secondary"
               >
-                <Home className="h-4 w-4" /> Más retos
+                <Home className="h-4 w-4" /> Mas retos
               </button>
               <button
                 onClick={() => router.refresh()}
-                className="ar-bg-navy-gradient flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-bold uppercase tracking-wider text-white shadow-lg transition-transform hover:scale-[1.02]"
+                className="game-btn game-btn-primary flex-1 justify-center"
               >
                 <RotateCcw className="h-4 w-4" strokeWidth={2.5} />
                 Jugar de nuevo
@@ -525,18 +495,19 @@ function Stat({
   color: "green" | "yellow" | "blue" | "orange";
 }) {
   const colorMap = {
-    green: "text-[var(--ar-green-600)]",
-    yellow: "text-[var(--ar-yellow-500)]",
-    blue: "text-[var(--ar-blue-500)]",
-    orange: "text-[var(--ar-orange-500)]",
+    green: { icon: "text-[var(--ar-green-400)] drop-shadow-[0_0_4px_rgba(34,197,94,0.5)]", value: "text-[var(--ar-green-400)]" },
+    yellow: { icon: "text-[var(--ar-yellow-500)] drop-shadow-[0_0_4px_rgba(234,179,8,0.5)]", value: "text-[var(--ar-yellow-500)]" },
+    blue: { icon: "text-[var(--ar-blue-300)] drop-shadow-[0_0_4px_rgba(59,130,246,0.5)]", value: "text-[var(--ar-blue-300)]" },
+    orange: { icon: "text-[var(--ar-orange-500)] drop-shadow-[0_0_4px_rgba(249,115,22,0.5)]", value: "text-[var(--ar-orange-500)]" },
   };
+  const c = colorMap[color];
   return (
-    <div className="rounded-xl border border-[var(--ar-gray-200)] bg-white p-3">
-      <Icon className={`h-4 w-4 ${colorMap[color]}`} strokeWidth={2.5} />
-      <div className="mt-1 text-lg font-extrabold tabular-nums text-[var(--ar-navy-900)]">
+    <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+      <Icon className={`h-4 w-4 ${c.icon}`} strokeWidth={2.5} />
+      <div className={`mt-1 text-lg font-black tabular-nums ${c.value}`}>
         {value}
       </div>
-      <div className="text-[10px] font-semibold uppercase tracking-wider text-[var(--ar-navy-500)]">
+      <div className="text-[10px] font-semibold uppercase tracking-wider text-[var(--ar-blue-300)]/40">
         {label}
       </div>
     </div>

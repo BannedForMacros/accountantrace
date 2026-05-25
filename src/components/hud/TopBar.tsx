@@ -11,16 +11,22 @@ interface TopBarProps {
   xpMeta: number;
   monedas: number;
   gemas: number;
+  etapaTitulo?: string;
 }
 
-export function TopBar({ nivel, xpActual, xpMeta, monedas, gemas }: TopBarProps) {
+export function TopBar({ nivel, xpActual, xpMeta, monedas, gemas, etapaTitulo }: TopBarProps) {
   return (
-    <header className="sticky top-0 z-30 border-b border-[rgba(59,130,246,0.15)] bg-[rgba(10,37,64,0.92)] backdrop-blur-md">
-      <div className="mx-auto flex max-w-7xl items-center gap-6 px-6 py-3">
+    <header className="sticky top-0 z-30 border-b border-white/10 bg-[#0A2540]/40 backdrop-blur-xl">
+      <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-2.5 lg:gap-6 lg:px-6">
         <Logo />
 
-        <div className="flex flex-1 items-center gap-4">
+        <div className="flex flex-1 items-center gap-3 lg:gap-4">
           <NivelBadge nivel={nivel} />
+          {etapaTitulo && (
+            <span className="hidden text-xs font-black uppercase tracking-wider text-[var(--ar-yellow-500)] md:block">
+              {etapaTitulo}
+            </span>
+          )}
           <div className="min-w-0 flex-1 max-w-md">
             <XPBar actual={xpActual} meta={xpMeta} />
           </div>

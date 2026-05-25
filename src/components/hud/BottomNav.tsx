@@ -19,7 +19,7 @@ const ITEMS: NavItem[] = [
 
 export function BottomNav() {
   return (
-    <nav className="sticky bottom-0 z-30 border-t border-[rgba(59,130,246,0.15)] bg-[rgba(10,37,64,0.95)] backdrop-blur-md">
+    <nav className="sticky bottom-0 z-30 border-t border-white/10 bg-[#0A2540]/60 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-stretch px-2">
         {ITEMS.map((item) => (
           <a
@@ -28,7 +28,7 @@ export function BottomNav() {
             className={`relative flex flex-1 flex-col items-center gap-1 py-3 transition-all duration-200 ${
               item.active
                 ? "nav-active-glow text-[var(--ar-green-400)]"
-                : "text-[var(--ar-blue-300)]/50 hover:text-[var(--ar-blue-300)]"
+                : "text-white/40 hover:text-[var(--ar-yellow-400)]"
             }`}
           >
             <item.Icon

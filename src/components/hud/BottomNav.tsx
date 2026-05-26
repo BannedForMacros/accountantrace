@@ -27,7 +27,7 @@ export function BottomNav() {
             href={item.href}
             className={`relative flex flex-1 flex-col items-center gap-1 py-3 transition-all duration-200 ${
               item.active
-                ? "nav-active-glow text-[var(--ar-green-400)]"
+                ? "nav-active-glow bg-emerald-500/10 text-[var(--ar-green-400)]"
                 : "text-white/40 hover:text-[var(--ar-yellow-400)]"
             }`}
           >

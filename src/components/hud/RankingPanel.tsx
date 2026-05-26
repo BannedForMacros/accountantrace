@@ -48,7 +48,9 @@ export function RankingPanel({ items = DEMO_RANKING }: { items?: RankingItem[] }
           <li
             key={it.posicion}
             className={`flex items-center gap-3 px-4 py-3 transition-colors ${
-              it.esTu ? "bg-[var(--ar-green-600)]/10" : "hover:bg-white/5"
+              it.esTu
+                ? "bg-emerald-500/20 border-l-2 border-emerald-500/60"
+                : "hover:bg-white/5"
             }`}
           >
             <span className="flex h-7 w-7 items-center justify-center">

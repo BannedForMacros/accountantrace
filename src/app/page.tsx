@@ -77,101 +77,106 @@ export default async function HomePage() {
             {/* ===== Columna izquierda: Hero content ===== */}
             <div className="flex flex-col justify-end pb-8 pt-8 lg:pb-10 lg:pr-8 lg:pt-0">
               <div className="animate-fade-up max-w-xl">
-                {/* Badge Etapa */}
-                <div className="mb-4 flex items-center gap-3">
-                  <div className="glow-green inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-[var(--ar-green-600)] to-[var(--ar-green-500)] px-3.5 py-2 text-xs font-black uppercase tracking-wider text-white shadow-lg">
-                    <Sparkles className="h-3.5 w-3.5" strokeWidth={2.5} />
-                    Etapa {etapa.id}
-                  </div>
-                  {etapa.medalla && (
-                    <div className="glass-chip inline-flex items-center gap-1.5 px-3 py-2">
-                      {etapa.medalla === "oro" ? (
-                        <Trophy className="h-3.5 w-3.5 text-[var(--ar-yellow-500)]" strokeWidth={2.5} />
-                      ) : (
-                        <Medal className="h-3.5 w-3.5 text-slate-300" strokeWidth={2.5} />
-                      )}
-                      <span className="text-[10px] font-black uppercase tracking-wider text-white/70">
-                        {etapa.medalla}
-                      </span>
+                {/* Backdrop sutil detrás del bloque de texto */}
+                <div className="rounded-2xl bg-gradient-to-r from-slate-950/80 via-slate-950/50 to-transparent p-6 lg:p-8">
+                  {/* Badge Etapa */}
+                  <div className="mb-5 flex items-center gap-3">
+                    <div className="glow-green inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-[var(--ar-green-600)] to-[var(--ar-green-500)] px-4 py-2.5 text-sm font-black uppercase tracking-wider text-white shadow-lg shadow-emerald-500/30">
+                      <Sparkles className="h-4 w-4" strokeWidth={2.5} />
+                      Etapa {etapa.id}
                     </div>
-                  )}
-                </div>
-
-                {/* Título principal */}
-                <h1 className="text-4xl font-black leading-tight text-white drop-shadow-[0_2px_20px_rgba(0,0,0,0.5)] lg:text-6xl">
-                  {etapa.titulo}
-                </h1>
-                <p className="mt-1 text-sm font-bold uppercase tracking-widest text-[var(--ar-blue-300)]/60">
-                  {etapa.nombre}
-                </p>
-
-                {/* Progreso */}
-                <div className="mt-4 inline-flex items-baseline gap-1 rounded-lg bg-black/30 px-3 py-1.5 backdrop-blur-sm">
-                  <span className="text-2xl font-black tabular-nums text-white">
-                    {Math.round(etapa.porcentajeMin)}
-                  </span>
-                  <span className="text-sm font-bold text-[var(--ar-green-400)]">%</span>
-                  <span className="ml-1 text-[10px] font-semibold uppercase tracking-wider text-white/40">
-                    progreso
-                  </span>
-                </div>
-
-                {/* Bienvenida */}
-                <div className="mt-6 flex items-start gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--ar-yellow-500)]/15">
-                    <Lightbulb
-                      className="h-5 w-5 text-[var(--ar-yellow-500)] drop-shadow-[0_0_6px_rgba(234,179,8,0.5)]"
-                      strokeWidth={2.25}
-                    />
+                    {etapa.medalla && (
+                      <div className="glass-chip inline-flex items-center gap-1.5 px-3 py-2">
+                        {etapa.medalla === "oro" ? (
+                          <Trophy className="h-3.5 w-3.5 text-[var(--ar-yellow-500)]" strokeWidth={2.5} />
+                        ) : (
+                          <Medal className="h-3.5 w-3.5 text-slate-300" strokeWidth={2.5} />
+                        )}
+                        <span className="text-[10px] font-black uppercase tracking-wider text-white/70">
+                          {etapa.medalla}
+                        </span>
+                      </div>
+                    )}
                   </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-white">
-                      Bienvenido,{" "}
-                      <span className="text-[var(--ar-green-400)]">
-                        {usuario.nombre}
-                      </span>
-                    </h3>
-                    <p className="mt-0.5 text-sm text-white/50">
-                      {usuario.etapaActual === 0
-                        ? "Responde 5 preguntas correctas para desbloquear la etapa de Practicante."
-                        : `Sigue avanzando para llegar a la etapa ${usuario.etapaActual + 1}.`}
-                    </p>
+
+                  {/* Título principal */}
+                  <h1 className="text-5xl font-black leading-[1.1] text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)] lg:text-7xl">
+                    {etapa.titulo}
+                  </h1>
+                  <p className="mt-2 text-sm font-bold uppercase tracking-widest text-[var(--ar-blue-300)]/70">
+                    {etapa.nombre}
+                  </p>
+
+                  {/* Progreso */}
+                  <div className="mt-5 inline-flex items-baseline gap-1.5 rounded-lg bg-black/50 px-4 py-2 backdrop-blur-sm">
+                    <span className="text-3xl font-black tabular-nums text-white">
+                      {Math.round(etapa.porcentajeMin)}
+                    </span>
+                    <span className="text-base font-bold text-[var(--ar-green-400)]">%</span>
+                    <span className="ml-1.5 text-xs font-semibold uppercase tracking-wider text-white/50">
+                      progreso
+                    </span>
                   </div>
-                </div>
 
-                {/* CTAs */}
-                <div className="mt-6 flex flex-wrap gap-3">
-                  <a href="/retos" className="game-btn game-btn-primary">
-                    <Swords className="h-4 w-4" strokeWidth={2.5} />
-                    Empezar reto
-                  </a>
-                  <a href="/cursos" className="game-btn game-btn-secondary">
-                    <BookOpen className="h-4 w-4" strokeWidth={2.5} />
-                    Ver cursos
-                  </a>
-                </div>
-
-                {/* Stats chips */}
-                <div className="animate-fade-up-delay mt-6 flex flex-wrap gap-3">
-                  <div className="glass-chip flex items-center gap-2.5 px-4 py-2.5">
-                    <Target className="h-4 w-4 text-[var(--ar-blue-300)]" strokeWidth={2.25} />
+                  {/* Bienvenida */}
+                  <div className="mt-6 flex items-start gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--ar-yellow-500)]/20">
+                      <Lightbulb
+                        className="h-5 w-5 text-[var(--ar-yellow-500)] drop-shadow-[0_0_6px_rgba(234,179,8,0.5)]"
+                        strokeWidth={2.25}
+                      />
+                    </div>
                     <div>
-                      <div className="text-[10px] font-semibold uppercase tracking-wider text-white/40">Retos</div>
-                      <div className="text-lg font-black tabular-nums leading-tight text-white">0</div>
+                      <h3 className="text-lg font-bold text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
+                        Bienvenido,{" "}
+                        <span className="text-[var(--ar-green-400)]">
+                          {usuario.nombre}
+                        </span>
+                      </h3>
+                      <p className="mt-0.5 text-sm text-white/60">
+                        {usuario.etapaActual === 0
+                          ? "Responde 5 preguntas correctas para desbloquear la etapa de Practicante."
+                          : `Sigue avanzando para llegar a la etapa ${usuario.etapaActual + 1}.`}
+                      </p>
                     </div>
                   </div>
-                  <div className="glass-chip flex items-center gap-2.5 px-4 py-2.5">
-                    <GraduationCap className="h-4 w-4 text-[var(--ar-green-400)] drop-shadow-[0_0_6px_rgba(34,197,94,0.5)]" strokeWidth={2.25} />
+
+                  {/* CTAs */}
+                  <div className="mt-7 flex flex-wrap gap-4">
+                    <a href="/retos" className="game-btn game-btn-primary !px-8 !py-4 !text-sm shadow-lg shadow-emerald-500/40">
+                      <Swords className="h-5 w-5" strokeWidth={2.5} />
+                      Empezar reto
+                    </a>
+                    <a href="/cursos" className="game-btn game-btn-secondary !px-8 !py-4 !text-sm">
+                      <BookOpen className="h-5 w-5" strokeWidth={2.5} />
+                      Ver cursos
+                    </a>
+                  </div>
+                </div>
+
+                {/* Stats bar unificada */}
+                <div className="animate-fade-up-delay mt-6 flex overflow-x-auto rounded-xl border-t border-amber-500/15 bg-slate-900/90 shadow-2xl shadow-black/40 backdrop-blur-xl">
+                  <div className="flex flex-1 items-center gap-3 px-5 py-4">
+                    <Target className="h-5 w-5 shrink-0 text-[var(--ar-blue-300)]" strokeWidth={2.25} />
                     <div>
-                      <div className="text-[10px] font-semibold uppercase tracking-wider text-white/40">Precisión</div>
-                      <div className="text-lg font-black tabular-nums leading-tight text-[var(--ar-green-400)]">{usuario.precision}%</div>
+                      <div className="text-[10px] font-semibold uppercase tracking-wider text-white/45">Retos</div>
+                      <div className="text-xl font-black tabular-nums leading-tight text-white">0</div>
                     </div>
                   </div>
-                  <div className="glass-chip flex items-center gap-2.5 px-4 py-2.5">
-                    <Flame className="h-4 w-4 text-[var(--ar-orange-500)] drop-shadow-[0_0_6px_rgba(249,115,22,0.5)]" strokeWidth={2.25} />
+                  <div className="w-px self-stretch bg-white/10" />
+                  <div className="flex flex-1 items-center gap-3 px-5 py-4">
+                    <GraduationCap className="h-5 w-5 shrink-0 text-[var(--ar-green-400)] drop-shadow-[0_0_6px_rgba(34,197,94,0.5)]" strokeWidth={2.25} />
                     <div>
-                      <div className="text-[10px] font-semibold uppercase tracking-wider text-white/40">Racha</div>
-                      <div className="text-lg font-black tabular-nums leading-tight text-[var(--ar-orange-500)]">
+                      <div className="text-[10px] font-semibold uppercase tracking-wider text-white/45">Precisión</div>
+                      <div className="text-xl font-black tabular-nums leading-tight text-[var(--ar-green-400)]">{usuario.precision}%</div>
+                    </div>
+                  </div>
+                  <div className="w-px self-stretch bg-white/10" />
+                  <div className="flex flex-1 items-center gap-3 px-5 py-4">
+                    <Flame className="h-5 w-5 shrink-0 text-[var(--ar-orange-500)] drop-shadow-[0_0_6px_rgba(249,115,22,0.5)]" strokeWidth={2.25} />
+                    <div>
+                      <div className="text-[10px] font-semibold uppercase tracking-wider text-white/45">Racha</div>
+                      <div className="text-xl font-black tabular-nums leading-tight text-[var(--ar-orange-500)]">
                         {usuario.rachaActual}
                         {usuario.rachaActual === 0 && (
                           <span className="ml-1 text-[10px] font-medium text-white/30">Inicia</span>
@@ -179,11 +184,12 @@ export default async function HomePage() {
                       </div>
                     </div>
                   </div>
-                  <div className="glass-chip flex items-center gap-2.5 px-4 py-2.5">
-                    <BookOpen className="h-4 w-4 text-[var(--ar-blue-300)]" strokeWidth={2.25} />
+                  <div className="w-px self-stretch bg-white/10" />
+                  <div className="flex flex-1 items-center gap-3 px-5 py-4">
+                    <BookOpen className="h-5 w-5 shrink-0 text-[var(--ar-blue-300)]" strokeWidth={2.25} />
                     <div>
-                      <div className="text-[10px] font-semibold uppercase tracking-wider text-white/40">Preguntas</div>
-                      <div className="text-lg font-black tabular-nums leading-tight text-white">{preguntasDisp}</div>
+                      <div className="text-[10px] font-semibold uppercase tracking-wider text-white/45">Preguntas</div>
+                      <div className="text-xl font-black tabular-nums leading-tight text-white">{preguntasDisp}</div>
                     </div>
                   </div>
                 </div>

@@ -20,7 +20,7 @@ const ITEMS: NavItem[] = [
 export function BottomNav() {
   return (
     <nav className="sticky bottom-0 z-30 border-t border-white/10 bg-slate-950/95 backdrop-blur-xl shadow-[0_-4px_20px_rgba(0,0,0,0.4)]">
-      <div className="mx-auto flex max-w-7xl items-stretch px-2">
+      <div className="flex items-stretch px-4">
         {ITEMS.map((item) => (
           <a
             key={item.href}

@@ -19,25 +19,25 @@ const ITEMS: NavItem[] = [
 
 export function BottomNav() {
   return (
-    <nav className="sticky bottom-0 z-30 border-t border-[var(--ar-gray-200)] bg-white">
+    <nav className="sticky bottom-0 z-30 border-t border-[rgba(59,130,246,0.15)] bg-[rgba(10,37,64,0.95)] backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-stretch px-2">
         {ITEMS.map((item) => (
           <a
             key={item.href}
             href={item.href}
-            className={`flex flex-1 flex-col items-center gap-1 py-3 transition-colors ${
+            className={`relative flex flex-1 flex-col items-center gap-1 py-3 transition-all duration-200 ${
               item.active
-                ? "text-[var(--ar-green-600)]"
-                : "text-[var(--ar-navy-500)] hover:text-[var(--ar-navy-900)]"
+                ? "nav-active-glow text-[var(--ar-green-400)]"
+                : "text-[var(--ar-blue-300)]/50 hover:text-[var(--ar-blue-300)]"
             }`}
           >
-            <item.Icon className="h-5 w-5" strokeWidth={2.25} />
+            <item.Icon
+              className={`h-5 w-5 transition-all ${item.active ? "drop-shadow-[0_0_6px_rgba(34,197,94,0.6)]" : ""}`}
+              strokeWidth={item.active ? 2.5 : 2}
+            />
             <span className="text-[10px] font-semibold uppercase tracking-wider">
               {item.label}
             </span>
-            {item.active && (
-              <span className="mt-0.5 h-0.5 w-6 rounded-full bg-[var(--ar-green-600)]" />
-            )}
           </a>
         ))}
       </div>

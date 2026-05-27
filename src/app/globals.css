@@ -6,14 +6,18 @@
 :root {
   /* Brand */
   --ar-navy-900: #0A2540;
+  --ar-navy-800: #0F2E4E;
   --ar-navy-700: #1A3A6B;
   --ar-navy-500: #2C5494;
   --ar-green-600: #16A34A;
   --ar-green-500: #22C55E;
+  --ar-green-400: #4ADE80;
   --ar-blue-500: #3B82F6;
   --ar-blue-300: #93C5FD;
   --ar-yellow-500: #EAB308;
+  --ar-yellow-400: #FACC15;
   --ar-orange-500: #F97316;
+  --ar-red-500: #EF4444;
   --ar-white: #FFFFFF;
   --ar-gray-50: #F9FAFB;
   --ar-gray-100: #F3F4F6;
@@ -21,18 +25,16 @@
   --ar-gray-700: #374151;
 
   /* Tema base */
-  --background: var(--ar-white);
-  --foreground: var(--ar-navy-900);
+  --background: #060E1A;
+  --foreground: #E2E8F0;
 }
 
 @theme inline {
-  /* Tokens base que usa Tailwind */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
-  /* Tokens de marca: usa con clases tipo bg-ar-navy, text-ar-green, etc */
   --color-ar-navy-900: var(--ar-navy-900);
   --color-ar-navy-700: var(--ar-navy-700);
   --color-ar-navy-500: var(--ar-navy-500);
@@ -50,17 +52,209 @@ body {
   font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
 }
 
-/* Gradient firma del logo: navy -> blue */
+/* ===========================================================
+   Gradients
+   =========================================================== */
 .ar-bg-navy-gradient {
   background: linear-gradient(135deg, var(--ar-navy-900) 0%, var(--ar-navy-700) 100%);
 }
 
-/* Gradient para botones primarios (verde Race) */
 .ar-bg-green-gradient {
   background: linear-gradient(135deg, var(--ar-green-600) 0%, var(--ar-green-500) 100%);
 }
 
-/* Para racha / fuego */
 .ar-bg-fire-gradient {
   background: linear-gradient(135deg, var(--ar-orange-500) 0%, var(--ar-yellow-500) 100%);
 }
+
+/* ===========================================================
+   Game card - base panel estilo juego
+   =========================================================== */
+.game-card {
+  background: linear-gradient(145deg, rgba(15,46,78,0.85) 0%, rgba(10,37,64,0.95) 100%);
+  border: 1px solid rgba(59,130,246,0.15);
+  border-radius: 1rem;
+  backdrop-filter: blur(8px);
+}
+.game-card-light {
+  background: linear-gradient(145deg, rgba(15,46,78,0.6) 0%, rgba(10,37,64,0.75) 100%);
+  border: 1px solid rgba(59,130,246,0.1);
+  border-radius: 0.75rem;
+}
+
+/* ===========================================================
+   Game buttons - efecto 3D con press
+   =========================================================== */
+.game-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.5rem;
+  font-weight: 800;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 0.75rem;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.2s, filter 0.2s;
+  text-decoration: none;
+  color: white;
+}
+.game-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+.game-btn:active {
+  transform: translateY(1px);
+}
+
+.game-btn-primary {
+  background: linear-gradient(180deg, var(--ar-green-400) 0%, var(--ar-green-600) 100%);
+  box-shadow:
+    0 4px 0 #0D7A32,
+    0 6px 20px rgba(22,163,74,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.25);
+}
+.game-btn-primary:hover {
+  box-shadow:
+    0 6px 0 #0D7A32,
+    0 8px 30px rgba(22,163,74,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.25);
+}
+.game-btn-primary:active {
+  box-shadow:
+    0 2px 0 #0D7A32,
+    0 3px 10px rgba(22,163,74,0.3),
+    inset 0 1px 0 rgba(255,255,255,0.15);
+}
+
+.game-btn-secondary {
+  background: linear-gradient(180deg, rgba(59,130,246,0.3) 0%, rgba(59,130,246,0.15) 100%);
+  border: 1px solid rgba(59,130,246,0.4);
+  box-shadow:
+    0 4px 0 rgba(10,37,64,0.8),
+    0 4px 15px rgba(59,130,246,0.15),
+    inset 0 1px 0 rgba(255,255,255,0.1);
+}
+.game-btn-secondary:hover {
+  background: linear-gradient(180deg, rgba(59,130,246,0.4) 0%, rgba(59,130,246,0.25) 100%);
+  box-shadow:
+    0 6px 0 rgba(10,37,64,0.8),
+    0 6px 20px rgba(59,130,246,0.25),
+    inset 0 1px 0 rgba(255,255,255,0.1);
+}
+.game-btn-secondary:active {
+  box-shadow:
+    0 2px 0 rgba(10,37,64,0.8),
+    0 2px 8px rgba(59,130,246,0.1),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+.game-btn-fire {
+  background: linear-gradient(180deg, var(--ar-yellow-400) 0%, var(--ar-orange-500) 100%);
+  color: var(--ar-navy-900);
+  box-shadow:
+    0 4px 0 #C2410C,
+    0 6px 20px rgba(249,115,22,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.3);
+}
+.game-btn-fire:hover {
+  box-shadow:
+    0 6px 0 #C2410C,
+    0 8px 30px rgba(249,115,22,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.3);
+}
+
+/* ===========================================================
+   XP Bar shimmer animation
+   =========================================================== */
+@keyframes xp-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+.xp-bar-shimmer::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: xp-shimmer 2s ease-in-out infinite;
+}
+
+/* ===========================================================
+   Glow pulse para badges/icons activos
+   =========================================================== */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(234,179,8,0.4); }
+  50% { box-shadow: 0 0 20px rgba(234,179,8,0.7), 0 0 40px rgba(234,179,8,0.3); }
+}
+.glow-yellow { animation: glow-pulse 2s ease-in-out infinite; }
+
+@keyframes glow-pulse-green {
+  0%, 100% { box-shadow: 0 0 8px rgba(22,197,94,0.3); }
+  50% { box-shadow: 0 0 18px rgba(22,197,94,0.6), 0 0 35px rgba(22,197,94,0.2); }
+}
+.glow-green { animation: glow-pulse-green 2s ease-in-out infinite; }
+
+@keyframes glow-pulse-blue {
+  0%, 100% { box-shadow: 0 0 8px rgba(59,130,246,0.3); }
+  50% { box-shadow: 0 0 18px rgba(59,130,246,0.6), 0 0 35px rgba(59,130,246,0.2); }
+}
+.glow-blue { animation: glow-pulse-blue 2s ease-in-out infinite; }
+
+/* ===========================================================
+   Bottom nav game HUD glow line
+   =========================================================== */
+@keyframes nav-glow-slide {
+  0% { opacity: 0.3; }
+  50% { opacity: 1; }
+  100% { opacity: 0.3; }
+}
+.nav-active-glow {
+  position: relative;
+}
+.nav-active-glow::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 25%;
+  right: 25%;
+  height: 2px;
+  background: var(--ar-green-500);
+  border-radius: 999px;
+  box-shadow: 0 0 8px var(--ar-green-500), 0 0 20px rgba(34,197,94,0.4);
+  animation: nav-glow-slide 2s ease-in-out infinite;
+}
+
+/* ===========================================================
+   Stat card hover lift
+   =========================================================== */
+.stat-card {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+/* ===========================================================
+   Floating animation (decorative elements)
+   =========================================================== */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.animate-float { animation: float 3s ease-in-out infinite; }
+
+/* ===========================================================
+   Progress ring for etapa badge
+   =========================================================== */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.animate-spin-slow { animation: spin-slow 8s linear infinite; }

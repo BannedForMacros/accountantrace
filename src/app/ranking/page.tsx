@@ -13,7 +13,6 @@ export default async function RankingPage() {
   const siguienteEtapa = await getEtapa(usuario.etapaActual + 1);
   const xpMeta = siguienteEtapa?.xpRequerido ?? etapa.xpRequerido + 100;
 
-  // Top 100
   const top = await prisma.usuario.findMany({
     where: { rol: "ESTUDIANTE" },
     orderBy: [{ xpTotal: "desc" }, { creadoEn: "asc" }],
@@ -30,7 +29,6 @@ export default async function RankingPage() {
     },
   });
 
-  // Posicion del usuario actual (si no esta en top 100)
   const posicionUsuario =
     top.findIndex((u) => u.id === usuario.id) >= 0
       ? top.findIndex((u) => u.id === usuario.id) + 1
@@ -55,7 +53,7 @@ export default async function RankingPage() {
   const resto = top.slice(3);
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col bg-[#060E1A]">
       <TopBar
         nivel={etapa.id}
         xpActual={usuario.xpTotal}
@@ -66,108 +64,87 @@ export default async function RankingPage() {
 
       <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-6">
         <div className="mb-6 flex items-center gap-3">
-          <div className="ar-bg-fire-gradient flex h-10 w-10 items-center justify-center rounded-lg shadow-lg">
-            <Trophy className="h-5 w-5 text-white" strokeWidth={2.5} />
+          <div className="glow-yellow flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--ar-yellow-500)] to-[var(--ar-orange-500)] shadow-lg">
+            <Trophy className="h-6 w-6 text-white" strokeWidth={2.5} />
           </div>
           <div>
-            <h1 className="text-2xl font-extrabold text-[var(--ar-navy-900)]">
+            <h1 className="text-2xl font-black text-white">
               Ranking global
             </h1>
-            <p className="text-sm text-[var(--ar-navy-500)]">
+            <p className="text-sm text-[var(--ar-blue-300)]/60">
               {totalEstudiantes}{" "}
               {totalEstudiantes === 1 ? "estudiante" : "estudiantes"} compitiendo
             </p>
           </div>
         </div>
 
-        {/* Posicion del usuario actual */}
-        <div className="ar-bg-navy-gradient mb-6 rounded-2xl p-5 text-white shadow-lg">
+        <div className="game-card mb-6 p-5">
           <div className="flex items-center gap-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--ar-yellow-500)]/20">
-              <span className="text-2xl font-extrabold text-[var(--ar-yellow-500)]">
+            <div className="glow-yellow flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--ar-yellow-500)]/15">
+              <span className="text-2xl font-black text-[var(--ar-yellow-500)]">
                 #{posicionUsuario}
               </span>
             </div>
             <div className="flex-1">
-              <div className="text-[10px] font-bold uppercase tracking-widest text-[var(--ar-blue-300)]">
+              <div className="text-[10px] font-bold uppercase tracking-widest text-[var(--ar-green-400)]">
                 Tu posicion
               </div>
-              <div className="text-lg font-bold">
+              <div className="text-lg font-bold text-white">
                 {usuario.nombre} {usuario.apellidos}
               </div>
             </div>
             <div className="text-right">
-              <div className="text-2xl font-extrabold tabular-nums">
+              <div className="text-2xl font-black tabular-nums text-white">
                 {usuario.xpTotal.toLocaleString("es-PE")}
               </div>
-              <div className="text-[10px] font-semibold uppercase tracking-wider text-[var(--ar-blue-300)]">
+              <div className="text-[10px] font-semibold uppercase tracking-wider text-[var(--ar-blue-300)]/50">
                 XP
               </div>
             </div>
           </div>
         </div>
 
-        {/* Podium top 3 */}
         {top3.length > 0 && (
           <div className="mb-6 grid grid-cols-3 gap-3">
-            {/* 2do (izquierda) */}
             {top3[1] && (
-              <PodiumCard
-                posicion={2}
-                usuario={top3[1]}
-                esTu={top3[1].id === usuario.id}
-                altura="alto-2"
-              />
+              <PodiumCard posicion={2} usuario={top3[1]} esTu={top3[1].id === usuario.id} altura="alto-2" />
             )}
-            {/* 1ro (centro) */}
             {top3[0] && (
-              <PodiumCard
-                posicion={1}
-                usuario={top3[0]}
-                esTu={top3[0].id === usuario.id}
-                altura="alto-1"
-              />
+              <PodiumCard posicion={1} usuario={top3[0]} esTu={top3[0].id === usuario.id} altura="alto-1" />
             )}
-            {/* 3ro (derecha) */}
             {top3[2] && (
-              <PodiumCard
-                posicion={3}
-                usuario={top3[2]}
-                esTu={top3[2].id === usuario.id}
-                altura="alto-3"
-              />
+              <PodiumCard posicion={3} usuario={top3[2]} esTu={top3[2].id === usuario.id} altura="alto-3" />
             )}
           </div>
         )}
 
-        {/* Tabla del resto */}
         {resto.length > 0 && (
-          <div className="overflow-hidden rounded-2xl border border-[var(--ar-gray-200)] bg-white">
-            <div className="border-b border-[var(--ar-gray-200)] bg-[var(--ar-gray-50)] px-4 py-3">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-[var(--ar-navy-900)]">
+          <div className="game-card overflow-hidden">
+            <div className="border-b border-white/5 px-4 py-3">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-white">
                 Posiciones 4 - {top.length}
               </h3>
             </div>
-            <ul className="divide-y divide-[var(--ar-gray-100)]">
+            <ul className="divide-y divide-white/5">
               {resto.map((u, i) => {
                 const pos = i + 4;
                 const esTu = u.id === usuario.id;
                 return (
                   <li
                     key={u.id}
-                    className={`flex items-center gap-3 px-4 py-3 ${
-                      esTu ? "bg-[var(--ar-green-600)]/10" : ""
+                    className={`flex items-center gap-3 px-4 py-3 transition-colors ${
+                      esTu ? "bg-[var(--ar-green-600)]/10" : "hover:bg-white/5"
                     }`}
                   >
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--ar-gray-100)] text-xs font-bold tabular-nums text-[var(--ar-navy-700)]">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/5 text-xs font-bold tabular-nums text-[var(--ar-blue-300)]/60">
                       #{pos}
                     </span>
                     <div className="min-w-0 flex-1">
                       <div
                         className={`truncate text-sm ${
                           esTu
-                            ? "font-bold text-[var(--ar-green-600)]"
-                            : "font-semibold text-[var(--ar-navy-900)]"
+                            ? "font-bold text-[var(--ar-green-400)]"
+                            : "font-semibold text-white"
                         }`}
                       >
                         {u.nombre} {u.apellidos}
@@ -177,20 +154,20 @@ export default async function RankingPage() {
                           </span>
                         )}
                       </div>
-                      <div className="flex items-center gap-3 text-[11px] text-[var(--ar-navy-500)]">
+                      <div className="flex items-center gap-3 text-[11px] text-[var(--ar-blue-300)]/40">
                         <span>Etapa {u.etapaActual}</span>
                         <span className="flex items-center gap-1">
                           <Flame className="h-3 w-3" strokeWidth={2.5} />
                           {u.rachaMaxima}
                         </span>
-                        <span>{Math.round(u.precision)}% precisión</span>
+                        <span>{Math.round(u.precision)}% precision</span>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-sm font-bold tabular-nums text-[var(--ar-navy-900)]">
+                      <div className="text-sm font-bold tabular-nums text-white">
                         {u.xpTotal.toLocaleString("es-PE")}
                       </div>
-                      <div className="text-[9px] font-semibold uppercase tracking-wider text-[var(--ar-navy-500)]">
+                      <div className="text-[9px] font-semibold uppercase tracking-wider text-[var(--ar-blue-300)]/40">
                         XP
                       </div>
                     </div>
@@ -202,9 +179,9 @@ export default async function RankingPage() {
         )}
 
         {top.length === 0 && (
-          <div className="rounded-2xl border border-[var(--ar-gray-200)] bg-white p-8 text-center">
-            <Trophy className="mx-auto h-10 w-10 text-[var(--ar-navy-500)]" />
-            <p className="mt-3 text-sm text-[var(--ar-navy-500)]">
+          <div className="game-card p-8 text-center">
+            <Trophy className="mx-auto h-10 w-10 text-[var(--ar-blue-300)]/30" />
+            <p className="mt-3 text-sm text-[var(--ar-blue-300)]/50">
               Aun no hay estudiantes en el ranking.
             </p>
           </div>
@@ -241,22 +218,25 @@ function PodiumCard({
     1: {
       Icon: Crown,
       color: "text-[var(--ar-yellow-500)]",
-      ring: "ring-[var(--ar-yellow-500)]",
-      bg: "bg-gradient-to-b from-[var(--ar-yellow-500)]/20 to-transparent",
+      glow: "shadow-[0_0_20px_rgba(234,179,8,0.3)]",
+      border: "border-[var(--ar-yellow-500)]/40",
+      bg: "from-[var(--ar-yellow-500)]/15 to-transparent",
       label: "Oro",
     },
     2: {
       Icon: Medal,
-      color: "text-slate-400",
-      ring: "ring-slate-400",
-      bg: "bg-gradient-to-b from-slate-300/30 to-transparent",
+      color: "text-slate-300",
+      glow: "shadow-[0_0_15px_rgba(148,163,184,0.2)]",
+      border: "border-slate-400/30",
+      bg: "from-slate-300/10 to-transparent",
       label: "Plata",
     },
     3: {
       Icon: Medal,
       color: "text-[var(--ar-orange-500)]",
-      ring: "ring-[var(--ar-orange-500)]",
-      bg: "bg-gradient-to-b from-[var(--ar-orange-500)]/20 to-transparent",
+      glow: "shadow-[0_0_15px_rgba(249,115,22,0.2)]",
+      border: "border-[var(--ar-orange-500)]/30",
+      bg: "from-[var(--ar-orange-500)]/10 to-transparent",
       label: "Bronce",
     },
   }[posicion];
@@ -269,21 +249,20 @@ function PodiumCard({
 
   return (
     <div
-      className={`relative rounded-2xl border-2 bg-white p-4 text-center shadow-md ${margenTop} ${
-        esTu ? "border-[var(--ar-green-600)]" : "border-[var(--ar-gray-200)]"
-      } ${config.bg}`}
+      className={`relative rounded-2xl border bg-gradient-to-b p-4 text-center ${margenTop} ${config.border} ${config.bg} ${config.glow} ${
+        esTu ? "ring-2 ring-[var(--ar-green-500)]/40" : ""
+      }`}
+      style={{ background: `linear-gradient(to bottom, rgba(15,46,78,0.8), rgba(10,37,64,0.95))` }}
     >
       <div className="flex justify-center">
-        <div
-          className={`flex h-14 w-14 items-center justify-center rounded-full bg-white ring-4 ${config.ring}`}
-        >
+        <div className={`flex h-14 w-14 items-center justify-center rounded-full ring-4 ${config.border} bg-[var(--ar-navy-900)]`}>
           <config.Icon className={`h-7 w-7 ${config.color}`} strokeWidth={2.5} />
         </div>
       </div>
       <div className={`mt-2 text-xs font-bold uppercase tracking-widest ${config.color}`}>
         #{posicion} · {config.label}
       </div>
-      <div className="mt-2 line-clamp-2 text-sm font-bold text-[var(--ar-navy-900)]">
+      <div className="mt-2 line-clamp-2 text-sm font-bold text-white">
         {usuario.nombre} {usuario.apellidos}
         {esTu && (
           <span className="ml-1 rounded bg-[var(--ar-green-600)] px-1.5 py-0.5 align-middle text-[9px] font-bold uppercase tracking-wider text-white">
@@ -291,10 +270,10 @@ function PodiumCard({
           </span>
         )}
       </div>
-      <div className="mt-2 text-xl font-extrabold tabular-nums text-[var(--ar-navy-900)]">
+      <div className="mt-2 text-xl font-black tabular-nums text-white">
         {usuario.xpTotal.toLocaleString("es-PE")}
       </div>
-      <div className="text-[10px] font-semibold uppercase tracking-wider text-[var(--ar-navy-500)]">
+      <div className="text-[10px] font-semibold uppercase tracking-wider text-[var(--ar-blue-300)]/50">
         XP · Etapa {usuario.etapaActual}
       </div>
     </div>

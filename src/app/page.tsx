@@ -6,6 +6,9 @@ import {
   BookOpen,
   Lock,
   User as UserIcon,
+  Swords,
+  Sparkles,
+  ChevronRight,
 } from "lucide-react";
 import { requireUser } from "@/lib/auth";
 import { getEtapa, getCursosByEtapa, countPreguntasByEtapa } from "@/lib/queries";
@@ -28,7 +31,7 @@ export default async function HomePage() {
   const etapa = await getEtapa(usuario.etapaActual);
   if (!etapa) {
     return (
-      <div className="p-8 text-[var(--ar-navy-900)]">
+      <div className="p-8 text-red-400">
         No se encontro la etapa {usuario.etapaActual}.
       </div>
     );
@@ -45,7 +48,7 @@ export default async function HomePage() {
   const nombreCompleto = `${usuario.nombre} ${usuario.apellidos}`.trim();
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col bg-[#060E1A]">
       <TopBar
         nivel={etapa.id}
         xpActual={usuario.xpTotal}
@@ -67,37 +70,33 @@ export default async function HomePage() {
               medalla={etapa.medalla}
             />
 
-            <div className="ar-bg-navy-gradient rounded-2xl p-6 text-white shadow-lg">
+            <div className="game-card p-6">
               <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--ar-yellow-500)]/20">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[var(--ar-yellow-500)]/15">
                   <Lightbulb
-                    className="h-6 w-6 text-[var(--ar-yellow-500)]"
+                    className="h-6 w-6 text-[var(--ar-yellow-500)] drop-shadow-[0_0_6px_rgba(234,179,8,0.5)]"
                     strokeWidth={2.25}
                   />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-lg font-bold">
+                  <h3 className="text-lg font-bold text-white">
                     Bienvenido,{" "}
-                    <span className="text-[var(--ar-green-500)]">
+                    <span className="text-[var(--ar-green-400)]">
                       {usuario.nombre}
                     </span>
                   </h3>
-                  <p className="mt-1 text-sm text-[var(--ar-blue-300)]">
+                  <p className="mt-1 text-sm text-[var(--ar-blue-300)]/60">
                     {usuario.etapaActual === 0
                       ? "Responde 5 preguntas correctas para desbloquear la etapa de Practicante."
                       : `Sigue avanzando para llegar a la etapa ${usuario.etapaActual + 1}.`}
                   </p>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    <a
-                      href="/retos"
-                      className="ar-bg-green-gradient rounded-lg px-5 py-2.5 text-sm font-bold uppercase tracking-wider text-white shadow-lg transition-transform hover:scale-[1.02] active:scale-[0.98]"
-                    >
+                  <div className="mt-4 flex flex-wrap gap-3">
+                    <a href="/retos" className="game-btn game-btn-primary">
+                      <Swords className="h-4 w-4" strokeWidth={2.5} />
                       Empezar reto
                     </a>
-                    <a
-                      href="/retos"
-                      className="rounded-lg border border-white/20 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/10"
-                    >
+                    <a href="/cursos" className="game-btn game-btn-secondary">
+                      <BookOpen className="h-4 w-4" strokeWidth={2.5} />
                       Ver cursos
                     </a>
                   </div>
@@ -108,7 +107,7 @@ export default async function HomePage() {
             <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
               <StatCard titulo="Retos" valor={0} Icon={Target} />
               <StatCard
-                titulo="Precisión"
+                titulo="Precision"
                 valor={`${usuario.precision}%`}
                 Icon={GraduationCap}
                 variant="green"
@@ -129,21 +128,21 @@ export default async function HomePage() {
               />
             </div>
 
-            <div className="rounded-2xl border border-[var(--ar-gray-200)] bg-white p-5">
+            <div className="game-card p-5">
               <div className="mb-4 flex items-center justify-between">
-                <h3 className="flex items-center gap-2 text-base font-bold uppercase tracking-wider text-[var(--ar-navy-900)]">
+                <h3 className="flex items-center gap-2 text-base font-bold uppercase tracking-wider text-white">
                   <BookOpen
-                    className="h-4 w-4 text-[var(--ar-navy-700)]"
+                    className="h-4 w-4 text-[var(--ar-blue-300)]"
                     strokeWidth={2.5}
                   />
                   Cursos en esta etapa
                 </h3>
-                <span className="rounded-full bg-[var(--ar-green-600)]/10 px-2.5 py-1 text-xs font-bold text-[var(--ar-green-600)]">
+                <span className="rounded-md bg-[var(--ar-green-600)]/15 px-2.5 py-1 text-xs font-bold text-[var(--ar-green-400)]">
                   {cursos.length} {cursos.length === 1 ? "curso" : "cursos"}
                 </span>
               </div>
               {cursos.length === 0 ? (
-                <p className="text-sm text-[var(--ar-navy-500)]">
+                <p className="text-sm text-[var(--ar-blue-300)]/50">
                   No hay cursos asignados a esta etapa.
                 </p>
               ) : (
@@ -151,14 +150,14 @@ export default async function HomePage() {
                   {cursos.map((c) => (
                     <li
                       key={c.id}
-                      className="flex items-start gap-3 rounded-lg border border-[var(--ar-gray-100)] p-3 transition-colors hover:border-[var(--ar-blue-500)]/40 hover:bg-[var(--ar-blue-500)]/5"
+                      className="group flex items-start gap-3 rounded-lg border border-white/5 p-3 transition-all hover:border-[var(--ar-blue-500)]/30 hover:bg-white/5"
                     >
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[var(--ar-navy-900)]/5 text-xs font-bold text-[var(--ar-navy-700)]">
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[var(--ar-navy-700)] text-xs font-bold text-[var(--ar-blue-300)]">
                         C{c.ciclo}
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
-                          <span className="truncate text-sm font-semibold text-[var(--ar-navy-900)]">
+                          <span className="truncate text-sm font-semibold text-white">
                             {c.nombre}
                           </span>
                           {c.esElectivo && (
@@ -167,11 +166,12 @@ export default async function HomePage() {
                             </span>
                           )}
                         </div>
-                        <p className="mt-0.5 line-clamp-2 text-xs text-[var(--ar-navy-500)]">
+                        <p className="mt-0.5 line-clamp-2 text-xs text-[var(--ar-blue-300)]/50">
                           {c.sumilla.slice(0, 140)}
-                          {c.sumilla.length > 140 ? "…" : ""}
+                          {c.sumilla.length > 140 ? "..." : ""}
                         </p>
                       </div>
+                      <ChevronRight className="h-4 w-4 shrink-0 text-white/20 transition-colors group-hover:text-[var(--ar-blue-300)]" />
                     </li>
                   ))}
                 </ul>
@@ -182,17 +182,17 @@ export default async function HomePage() {
           <aside className="flex flex-col gap-4">
             <RankingPanel />
 
-            <div className="rounded-xl border border-[var(--ar-gray-200)] bg-white p-4">
-              <h3 className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-[var(--ar-navy-900)]">
+            <div className="game-card p-4">
+              <h3 className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-white">
                 <Lock
-                  className="h-4 w-4 text-[var(--ar-navy-500)]"
+                  className="h-4 w-4 text-[var(--ar-blue-300)]/50"
                   strokeWidth={2.5}
                 />
                 Elementos bloqueados
               </h3>
-              <ul className="space-y-2 text-sm text-[var(--ar-navy-500)]">
+              <ul className="space-y-2.5">
                 {ELEMENTOS_BLOQUEADOS.map((item) => (
-                  <li key={item} className="flex items-center gap-2">
+                  <li key={item} className="flex items-center gap-2.5 text-sm text-[var(--ar-blue-300)]/40">
                     <Lock className="h-3.5 w-3.5 shrink-0" strokeWidth={2.25} />
                     <span>{item}</span>
                   </li>
@@ -200,16 +200,16 @@ export default async function HomePage() {
               </ul>
             </div>
 
-            <div className="rounded-xl border border-[var(--ar-gray-200)] bg-white p-4">
-              <div className="flex items-center gap-3 rounded-lg bg-[var(--ar-gray-50)] p-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--ar-navy-900)] text-white">
+            <div className="game-card p-4">
+              <div className="flex items-center gap-3 rounded-lg bg-white/5 p-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[var(--ar-green-600)] to-[var(--ar-green-500)] text-white shadow-lg">
                   <UserIcon className="h-5 w-5" strokeWidth={2.25} />
                 </div>
                 <div className="min-w-0">
-                  <div className="truncate text-sm font-semibold text-[var(--ar-navy-900)]">
+                  <div className="truncate text-sm font-bold text-white">
                     {nombreCompleto}
                   </div>
-                  <div className="text-xs text-[var(--ar-navy-500)]">
+                  <div className="text-xs text-[var(--ar-blue-300)]/50">
                     {etapa.nombre} · {usuario.genero === "MUJER" ? "Mujer" : "Hombre"}
                   </div>
                 </div>

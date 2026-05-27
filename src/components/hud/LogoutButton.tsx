@@ -9,7 +9,7 @@ export function LogoutButton() {
       <button
         type="submit"
         title="Cerrar sesion"
-        className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--ar-navy-500)] transition-colors hover:bg-[var(--ar-gray-100)] hover:text-[var(--ar-navy-900)]"
+        className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--ar-blue-300)]/50 transition-colors hover:bg-white/10 hover:text-white"
       >
         <LogOut className="h-4 w-4" strokeWidth={2.25} />
       </button>

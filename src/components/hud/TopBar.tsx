@@ -15,7 +15,7 @@ interface TopBarProps {
 
 export function TopBar({ nivel, xpActual, xpMeta, monedas, gemas }: TopBarProps) {
   return (
-    <header className="sticky top-0 z-30 border-b border-[var(--ar-gray-200)] bg-white/90 backdrop-blur">
+    <header className="sticky top-0 z-30 border-b border-[rgba(59,130,246,0.15)] bg-[rgba(10,37,64,0.92)] backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center gap-6 px-6 py-3">
         <Logo />
 

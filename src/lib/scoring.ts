@@ -1,22 +1,25 @@
-import { Dificultad } from "@/generated/prisma";
-
 /**
- * Parametros base de tiempo y bonificaciones.
+ * Parametros base de tiempo, XP y bonificaciones.
+ *
+ * Modelo de puntaje (simple y predecible):
+ *   - Cada respuesta correcta vale XP_BASE.
+ *   - Un reto tiene como maximo PREGUNTAS_POR_RETO preguntas.
+ *   - Al cerrar la partida, la mejor racha alcanzada otorga un bonus
+ *     de XP_RACHA_POR_NIVEL por nivel, hasta XP_RACHA_BONUS_MAX.
+ *
+ * => Reto perfecto de 10 preguntas: 10 x 10 + 20 = 120 XP maximo.
  */
 export const TIEMPO_LIMITE_SEG = 30;
 export const SPEED_BONUS_SEG = 7;
 
+export const PREGUNTAS_POR_RETO = 10;
+
 export const XP_BASE = 10;
-export const XP_SPEED_BONUS = 5;
+export const XP_RACHA_POR_NIVEL = 2;
+export const XP_RACHA_BONUS_MAX = 20;
 
 export const MONEDAS_BASE = 5;
 export const GEMAS_POR_RACHA_O_SPEED = 1;
-
-const DIF_MULTIPLIER: Record<Dificultad, number> = {
-  FACIL: 1,
-  MEDIO: 1.5,
-  DIFICIL: 2,
-};
 
 export interface ResultadoRespuesta {
   esCorrecta: boolean;
@@ -30,12 +33,11 @@ export interface ResultadoRespuesta {
 interface CalcularInput {
   esCorrecta: boolean;
   tiempoSeg: number;
-  dificultad: Dificultad;
   rachaPrevia: number;
 }
 
 export function calcularResultado(input: CalcularInput): ResultadoRespuesta {
-  const { esCorrecta, tiempoSeg, dificultad, rachaPrevia } = input;
+  const { esCorrecta, tiempoSeg, rachaPrevia } = input;
 
   if (!esCorrecta) {
     return {
@@ -50,24 +52,34 @@ export function calcularResultado(input: CalcularInput): ResultadoRespuesta {
 
   const speedBonus = tiempoSeg <= SPEED_BONUS_SEG;
   const nuevaRacha = rachaPrevia + 1;
-  const mult = DIF_MULTIPLIER[dificultad];
 
-  // XP: base + speed + racha cap 10, todo multiplicado por dificultad
-  const xpBruto = XP_BASE + (speedBonus ? XP_SPEED_BONUS : 0) + Math.min(nuevaRacha, 10);
-  const xpGanado = Math.round(xpBruto * mult);
-
-  const monedasGanadas = Math.round(MONEDAS_BASE * mult);
+  // El XP base es fijo por acierto; el bonus de racha se aplica al cerrar
+  // la partida (ver bonusRacha). El speed solo otorga gemas.
   const gemasGanadas =
     speedBonus || nuevaRacha >= 3 ? GEMAS_POR_RACHA_O_SPEED : 0;
 
   return {
     esCorrecta: true,
-    xpGanado,
-    monedasGanadas,
+    xpGanado: XP_BASE,
+    monedasGanadas: MONEDAS_BASE,
     gemasGanadas,
     speedBonus,
     nuevaRacha,
   };
+}
+
+/** Bonus de XP segun la mejor racha alcanzada en una partida. */
+export function bonusRacha(rachaMax: number): number {
+  return Math.min(rachaMax * XP_RACHA_POR_NIVEL, XP_RACHA_BONUS_MAX);
+}
+
+/**
+ * XP maximo que puede dar un reto de `numPreguntas` preguntas:
+ * todas correctas (base) + racha perfecta (bonus).
+ */
+export function xpMaximoReto(numPreguntas: number): number {
+  const n = Math.max(0, Math.min(numPreguntas, PREGUNTAS_POR_RETO));
+  return n * XP_BASE + bonusRacha(n);
 }
 
 /**

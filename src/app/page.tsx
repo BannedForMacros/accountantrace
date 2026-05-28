@@ -47,7 +47,7 @@ export default async function HomePage() {
   const nombreCompleto = `${usuario.nombre} ${usuario.apellidos}`.trim();
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="relative min-h-screen lg:h-screen lg:overflow-hidden">
       {/* ===== CAPA 0: Fondo inmersivo ===== */}
       <div className="fixed inset-0 z-0">
         <Image
@@ -62,7 +62,7 @@ export default async function HomePage() {
       </div>
 
       {/* ===== CAPA 1: Todo el UI ===== */}
-      <div className="relative z-10 flex min-h-screen flex-col">
+      <div className="relative z-10 flex min-h-screen flex-col lg:h-screen lg:min-h-0">
         <TopBar
           nivel={etapa.id}
           xpActual={usuario.xpTotal}
@@ -72,10 +72,10 @@ export default async function HomePage() {
           etapaTitulo={etapa.titulo}
         />
 
-        <main className="w-full flex-1 px-4 lg:px-6">
-          <div className="grid min-h-[calc(100vh-130px)] grid-cols-1 lg:grid-cols-[1fr_340px]">
+        <main className="w-full flex-1 overflow-hidden px-4 lg:px-6">
+          <div className="grid h-full grid-cols-1 lg:grid-cols-[1fr_340px]">
             {/* ===== Columna izquierda: Hero content ===== */}
-            <div className="flex flex-col justify-end pb-6 pt-8 lg:pb-8 lg:pr-6 lg:pt-0">
+            <div className="flex flex-col justify-end pb-6 pt-8 lg:overflow-y-auto lg:pb-6 lg:pr-6 lg:pt-0">
               <div className="animate-fade-up max-w-xl">
                 {/* Backdrop sutil detrás del bloque de texto */}
                 <div className="rounded-2xl bg-gradient-to-r from-slate-950/80 via-slate-950/50 to-transparent p-6 lg:p-8">
@@ -197,7 +197,7 @@ export default async function HomePage() {
             </div>
 
             {/* ===== Columna derecha: Sidebar glass ===== */}
-            <aside className="flex flex-col gap-3 pb-6 pt-4 lg:glass-scroll lg:max-h-[calc(100vh-130px)] lg:overflow-y-auto lg:py-4">
+            <aside className="flex flex-col gap-3 pb-6 pt-4 lg:glass-scroll lg:overflow-y-auto lg:py-4">
               {/* Ranking */}
               <RankingPanel />
 

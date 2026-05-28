@@ -3,9 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
-import { calcularResultado, determinarEtapaPorXP } from "@/lib/scoring";
+import { calcularResultado, bonusRacha, determinarEtapaPorXP } from "@/lib/scoring";
 import { evaluarLogros } from "@/lib/logros";
-import { Dificultad } from "@/generated/prisma";
 
 export interface RespuestaCliente {
   preguntaId: string;
@@ -18,6 +17,7 @@ export interface ResultadoFinal {
   totalPreguntas: number;
   totalCorrectas: number;
   puntajeFinal: number;
+  xpBonusRacha: number;
   xpAntes: number;
   xpDespues: number;
   monedasGanadas: number;
@@ -85,7 +85,6 @@ export async function finalizarPartida(
     const res = calcularResultado({
       esCorrecta,
       tiempoSeg: r.tiempoSeg,
-      dificultad: p.dificultad as Dificultad,
       rachaPrevia: rachaActual,
     });
 
@@ -117,6 +116,10 @@ export async function finalizarPartida(
       speedBonus: res.speedBonus,
     });
   }
+
+  // Bonus de XP por la mejor racha alcanzada (hasta +20).
+  const xpBonusRacha = bonusRacha(rachaMaxPartida);
+  xpAcumulado += xpBonusRacha;
 
   // Actualizar partida con cierre
   await prisma.partida.update({
@@ -217,6 +220,7 @@ export async function finalizarPartida(
     totalPreguntas: input.respuestas.length,
     totalCorrectas,
     puntajeFinal: xpAcumulado,
+    xpBonusRacha,
     xpAntes,
     xpDespues,
     monedasGanadas: monedasAcum,

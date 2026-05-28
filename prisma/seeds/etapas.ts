@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../../src/generated/prisma";
+import { xpMaximoReto, PREGUNTAS_POR_RETO } from "../../src/lib/scoring";
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
@@ -9,16 +10,12 @@ const prisma = new PrismaClient({ adapter });
  * Catalogo estatico de las 9 etapas del juego.
  * Fuente: EVOLUCION EN CADA ETAPA.docx + mockups por sexo.
  *
- * Umbrales:
- *   Etapa 0 = inicio
- *   Etapa 1 = 5 preguntas bien respondidas (especial)
- *   Etapa 2 = 15%
- *   Etapa 3 = 25%
- *   Etapa 4 = 40%
- *   Etapa 5 = 55%
- *   Etapa 6 = 70%
- *   Etapa 7 = 85%
- *   Etapa 8 = 100%
+ * El campo `xpRequerido` se RECALCULA dinamicamente al sembrar (ver
+ * calcularUmbrales) en funcion de cuantos cursos se desbloquean en cada
+ * etapa. Regla: para subir de la etapa k a la k+1 basta con completar
+ * (cursos nuevos de la etapa k - 1) retos casi perfectos. Se deja un
+ * margen de 1 reto: nunca hace falta completar TODOS para avanzar.
+ * Los valores en el array son solo un fallback si aun no hay cursos en BD.
  */
 const ETAPAS = [
   {
@@ -149,16 +146,59 @@ const ETAPAS = [
   },
 ];
 
+/**
+ * Calcula el XP acumulado requerido por cada etapa a partir del numero de
+ * cursos que se desbloquean en cada una. Para pasar de la etapa k a la k+1
+ * se necesita completar (cursosNuevos[k] - 1) retos casi perfectos, con un
+ * minimo de 1 reto. Devuelve un Map id -> xpRequerido, o null si aun no hay
+ * cursos en BD (en cuyo caso se usan los valores estaticos del array).
+ */
+async function calcularUmbrales(): Promise<Map<number, number> | null> {
+  const conteo = await prisma.curso.groupBy({
+    by: ["etapaMinima"],
+    _count: { _all: true },
+  });
+
+  const total = conteo.reduce((acc, r) => acc + r._count._all, 0);
+  if (total === 0) return null;
+
+  const cursosNuevos = new Map<number, number>();
+  for (const r of conteo) cursosNuevos.set(r.etapaMinima, r._count._all);
+
+  const xpPorReto = xpMaximoReto(PREGUNTAS_POR_RETO);
+  const umbrales = new Map<number, number>();
+  let acumulado = 0;
+  umbrales.set(0, 0);
+  for (let k = 0; k < 8; k++) {
+    const nuevos = cursosNuevos.get(k) ?? 0;
+    const retosNecesarios = Math.max(1, nuevos - 1);
+    acumulado += retosNecesarios * xpPorReto;
+    umbrales.set(k + 1, acumulado);
+  }
+  return umbrales;
+}
+
 async function main() {
   console.log("Sembrando etapas...");
 
+  const umbrales = await calcularUmbrales();
+  if (!umbrales) {
+    console.warn(
+      "  ! No hay cursos en BD: usando umbrales estaticos. Corre seed:cursos y vuelve a sembrar etapas."
+    );
+  }
+
   for (const etapa of ETAPAS) {
+    const xpRequerido = umbrales?.get(etapa.id) ?? etapa.xpRequerido;
+    const data = { ...etapa, xpRequerido };
     await prisma.etapa.upsert({
       where: { id: etapa.id },
-      update: etapa,
-      create: etapa,
+      update: data,
+      create: data,
     });
-    console.log(`  [${etapa.id}] ${etapa.nombre} - ${etapa.porcentajeMin}%`);
+    console.log(
+      `  [${etapa.id}] ${etapa.nombre} - ${xpRequerido.toLocaleString("es-PE")} XP`
+    );
   }
 
   const total = await prisma.etapa.count();

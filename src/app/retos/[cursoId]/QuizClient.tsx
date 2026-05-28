@@ -25,7 +25,13 @@ import {
   type RespuestaCliente,
   type ResultadoFinal,
 } from "../actions";
-import { TIEMPO_LIMITE_SEG, SPEED_BONUS_SEG } from "@/lib/scoring";
+import {
+  TIEMPO_LIMITE_SEG,
+  SPEED_BONUS_SEG,
+  XP_BASE,
+  XP_RACHA_BONUS_MAX,
+  xpMaximoReto,
+} from "@/lib/scoring";
 
 export interface PreguntaJuego {
   id: string;
@@ -188,9 +194,13 @@ export function QuizClient({ curso, preguntas }: QuizClientProps) {
             </div>
 
             <div className="mt-4 rounded-lg border border-white/5 bg-white/5 p-3 text-xs text-[var(--ar-blue-300)]/60">
-              <strong className="text-white">Reglas:</strong> respuesta correcta = XP. Si respondes en
-              menos de {SPEED_BONUS_SEG}s, recibes bonus extra. Encadena correctas
-              para subir tu racha.
+              <strong className="text-white">Reglas:</strong> cada acierto suma{" "}
+              {XP_BASE} XP y encadenar correctas da un bonus de racha de hasta{" "}
+              {XP_RACHA_BONUS_MAX} XP. Este reto da hasta{" "}
+              <strong className="text-[var(--ar-green-400)]">
+                {xpMaximoReto(totalPreg)} XP
+              </strong>
+              . Responder en menos de {SPEED_BONUS_SEG}s te da gemas.
             </div>
 
             <div className="mt-5 flex gap-2">
@@ -444,6 +454,13 @@ function ResultadoView({
               <Stat label="Gemas" value={`+${resultado.gemasGanadas}`} Icon={Gem} color="blue" />
               <Stat label="Racha max." value={resultado.rachaMaxPartida} Icon={Flame} color="orange" />
             </div>
+
+            {resultado.xpBonusRacha > 0 && (
+              <div className="mt-3 flex items-center justify-center gap-1.5 rounded-lg border border-[var(--ar-orange-500)]/20 bg-[var(--ar-orange-500)]/10 px-3 py-2 text-xs font-bold text-[var(--ar-orange-500)]">
+                <Flame className="h-3.5 w-3.5" strokeWidth={2.5} />
+                Bonus de racha: +{resultado.xpBonusRacha} XP incluidos
+              </div>
+            )}
 
             <div className="mt-5 rounded-xl border border-white/10 bg-white/5 p-4">
               <div className="text-[10px] font-bold uppercase tracking-wider text-[var(--ar-blue-300)]/50">

@@ -31,7 +31,9 @@
       "PowerShell($env:PGPASSWORD = \"postgres\"; $psql = \"C:\\\\Program Files\\\\PostgreSQL\\\\17\\\\bin\\\\psql.exe\"; & $psql -U postgres -h localhost -p 5432 -d accountantrace -c \"\\\\d partidas\" 2>&1 | Select-String -Pattern \"\\(cursoId|fkey|references|Foreign\\)\")",
       "Bash(npx next *)",
       "PowerShell(\\(Get-Item \"C:\\\\MacSoft\\\\RENACYT\\\\AccountantRace\\\\etapa0-hombre.jpeg\"\\).Length; \\(Get-Item \"C:\\\\MacSoft\\\\RENACYT\\\\AccountantRace\\\\public\\\\escenarios\\\\etapa0-hombre.jpeg\"\\).Length; \\(Get-Item \"C:\\\\MacSoft\\\\RENACYT\\\\AccountantRace\\\\escenarios\\\\etapa0-hombre.jpeg\"\\).Length)",
-      "PowerShell(Get-NetTCPConnection *)"
+      "PowerShell(Get-NetTCPConnection *)",
+      "Bash(npx tsc *)",
+      "Bash(npx eslint *)"
     ]
   }
 }

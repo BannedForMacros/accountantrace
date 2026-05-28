@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { Play, BookOpen, Lock, Target, AlertTriangle, Sparkles } from "lucide-react";
+import { Play, BookOpen, Lock, Target, AlertTriangle, Zap } from "lucide-react";
 import { requireUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getEtapa } from "@/lib/queries";
+import { xpMaximoReto } from "@/lib/scoring";
 import { TopBar } from "@/components/hud/TopBar";
 import { BottomNav } from "@/components/hud/BottomNav";
 
@@ -86,10 +87,14 @@ export default async function RetosPage() {
                   {c.nombre}
                 </h3>
 
-                <p className="mb-4 line-clamp-3 flex-1 text-xs text-[var(--ar-blue-300)]/50">
-                  {c.sumilla.slice(0, 200)}
-                  {c.sumilla.length > 200 ? "..." : ""}
-                </p>
+                <div className="flex-1" />
+
+                {!sinPreg && (
+                  <div className="mb-3 inline-flex w-fit items-center gap-1.5 rounded-md bg-[var(--ar-green-600)]/10 px-2 py-1 text-[11px] font-bold text-[var(--ar-green-400)]">
+                    <Zap className="h-3.5 w-3.5" strokeWidth={2.5} />
+                    Hasta {xpMaximoReto(totalPreg)} XP
+                  </div>
+                )}
 
                 <div className="flex items-center justify-between gap-2 border-t border-white/5 pt-3">
                   <span className="flex items-center gap-1.5 text-xs font-medium text-[var(--ar-blue-300)]/50">

@@ -180,10 +180,7 @@ export default async function CursosPage({ searchParams }: Props) {
                   {c.nombre}
                 </h3>
 
-                <p className="mb-3 line-clamp-3 flex-1 text-xs text-[var(--ar-blue-300)]/40">
-                  {c.sumilla.slice(0, 220)}
-                  {c.sumilla.length > 220 ? "..." : ""}
-                </p>
+                <div className="mb-3 flex-1" />
 
                 {progreso && respondidas > 0 && (
                   <div className="mb-3 grid grid-cols-3 gap-1 rounded-lg border border-white/5 bg-white/5 p-2 text-center">
